@@ -57,7 +57,7 @@ public class RegisterActivity extends BaseActivity {
     private TextInputEditText mCnic;
     private TextInputEditText mRegNo;
     private FirebaseFirestore db;
-    private View view;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +93,7 @@ public class RegisterActivity extends BaseActivity {
         mBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                backToLogin(v);
+                backToLogin();
             }
         });
     }
@@ -131,7 +131,7 @@ public class RegisterActivity extends BaseActivity {
         //setphonenumber
         saveMap();
         // Go to MainActivity
-        backToLogin(view);
+        backToLogin();
     }
 
 
@@ -220,7 +220,7 @@ public class RegisterActivity extends BaseActivity {
     }
 
 
-    public void backToLogin(View view) {
+    public void backToLogin() {
         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
@@ -228,6 +228,6 @@ public class RegisterActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        backToLogin(view);
+        backToLogin();
     }
 }

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -35,8 +36,8 @@ public class LoginActivity extends BaseActivity {
     //firebase
     private FirebaseAuth mAuth;
 
-    private EditText  mPassword;
-    private EditText mEmail;
+    private TextInputEditText mPassword;
+    private TextInputEditText mEmail;
     private TextView as;
     private TextView txt_createaccount;
     private View mProgressView;

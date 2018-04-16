@@ -1,5 +1,6 @@
 package com.example.raza.total_logix_driver.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -82,18 +83,34 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        switch (item.getItemId()) {
+            case R.id.home:
 
-        } else if (id == R.id.nav_slideshow) {
+                break;
 
-        } else if (id == R.id.nav_manage) {
+            case R.id.completed_rides:
 
-        } else if (id == R.id.nav_share) {
+                break;
+            case R.id.cancelled:
 
-        } else if (id == R.id.nav_send) {
+                break;
+            case R.id.payment_detail:
 
+                break;
+            case R.id.profile:
+
+                break;
+            case R.id.help:
+
+                break;
+
+            case R.id.logout:
+
+                break;
+
+            default:
+
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -10,7 +10,7 @@
         android:width="1dp"
         android:color="@color/hint"></stroke>
 
-    <!-- The radius makes the corners rounded -->
+    <!-- The radius makes the corners rounded_fail -->
     <corners android:radius="20dp"></corners>
 
 </shape>

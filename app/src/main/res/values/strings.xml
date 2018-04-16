@@ -26,5 +26,39 @@
     <string name="reset_password">Reset Password</string>
     <string name="reset_message">Enter your registered email address ,We will send you an email to reset your password</string>
     <string name="cancel">Cancel</string>
+    <string name="Upload_dl">Upload Driving License</string>
+    <string name="Upload_cnic">Upload CNIC</string>
+    <string name="Upload_reg">Upload Reg:Document</string>
+    <string name="reg_doc">Registration Document</string>
+    <string name="front">Front</string>
+    <string name="back_pic">Back</string>
+    <string name="save">Save</string>
+    <string name="verify_email">Verify Email</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="online">you are online</string>
+    <string name="user">user</string>
+    <string name="off">Off</string>
+    <string name="on">On</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_profile">Profile</string>
+    <string name="menu_completed">Completed Ride</string>
+    <string name="menu_cancelled">Cancelled Ride</string>
+    <string name="menu_payment">Payment History</string>
+    <string name="menu_help">Help</string>
+    <string name="menu_logout">Logout</string>
+    <string name="total_rides">Total Rides</string>
+    <string name="ride_count">00</string>
+    <string name="earnings">Earnings</string>
+    <string name="today">Today</string>
+    <string name="todayearning">00</string>
+    <string name="this_week">This Week</string>
+    <string name="weekearning">00</string>
+    <string name="overall">Overall</string>
+    <string name="overallearning">00</string>
+
+    <!--    Permissions    -->
+    <string name="permission_rationale_location">Access to the location service is required to demonstrate the \'my location\' feature, which shows your current location on the map.</string>
+    <string name="location_permission_denied">This sample requires location permission to enable the \'my location\' layer. Please try again and grant access to use the location.\nIf the permission has been permanently denied, it can be enabled from the System Settings &gt; Apps &gt; \'Google Maps API Demos\'.</string>
+    <string name="permission_required_toast">Location permission is required for this demo.</string>
 
 </resources>

@@ -18,7 +18,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
 
-public class ForgetPasswordActivity extends AppCompatActivity {
+public class ForgetPasswordActivity extends BaseActivity {
 
     private FirebaseAuth mAuth;
     private EditText mEmail;
