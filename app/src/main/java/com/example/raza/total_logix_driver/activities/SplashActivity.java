@@ -1,4 +1,4 @@
-package com.example.raza.total_logix_driver.Activities;
+package com.example.raza.total_logix_driver.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
