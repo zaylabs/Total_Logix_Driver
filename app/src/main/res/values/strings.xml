@@ -77,7 +77,24 @@
     <string name="permission_denied_explanation">Permission was denied, but is needed for core
         functionality.</string>
     <string name="settings">Settings</string>
-
+    <string name="from">FROM</string>
+    <string name="sample_from">Novex Dry Cleaners, Asghar Chambers, Jail Road, Hirabad, Hyderabad, Pakistan</string>
+    <string name="to">TO</string>
+    <string name="arrow">arrow</string>
+    <string name="to_address">Zaylabs, Ashar Chambers,Jail Road, Hirabad, Hyderabad, Pakistan</string>
+    <string name="distance">Distance</string>
+    <string name="Sample_km_Away">3.67 KM Away</string>
+    <string name="date">Date</string>
+    <string name="sample_date">March 7th,2017</string>
+    <string name="time">Time</string>
+    <string name="sample_time">10:00 PM</string>
+    <string name="customer_name">CUSTOMER NAME</string>
+    <string name="sample_customer_name">John Doe</string>
+    <string name="est_distance">Est: Distance</string>
+    <string name="sample_distance">6 KM</string>
+    <string name="decline">DECLINE</string>
+    <string name="accept">Accept</string>
+    <string name="sample_phone">00923332626150</string>
 
 
 </resources>
