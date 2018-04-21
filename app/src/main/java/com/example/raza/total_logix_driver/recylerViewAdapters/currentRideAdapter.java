@@ -1,21 +1,28 @@
 package com.example.raza.total_logix_driver.recylerViewAdapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.raza.total_logix_driver.DTO.acceptRequest;
 import com.example.raza.total_logix_driver.DTO.driverAvailable;
 import com.example.raza.total_logix_driver.DTO.driverHistory;
 import com.example.raza.total_logix_driver.R;
+import com.example.raza.total_logix_driver.activities.Current_Ride_Activity;
+import com.example.raza.total_logix_driver.activities.HomeActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -28,6 +35,8 @@ import java.util.Date;
 
 import java.util.List;
 import java.util.Objects;
+
+import static android.support.constraint.Constraints.TAG;
 
 public class currentRideAdapter extends RecyclerView.Adapter<currentRideAdapter.ViewHolder> {
 
@@ -375,6 +384,23 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
         holder.mPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                db.collection("acceptRequest").document(dHistory.get(position).getUniqueID()).delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                                Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                                Intent intent = new Intent(context, HomeActivity.class);
+                                context.startActivity(intent);
+                            }
+
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error deleting document", e);
+                            }
+                        });
 
             }
         });

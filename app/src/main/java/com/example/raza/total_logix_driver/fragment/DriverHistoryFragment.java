@@ -28,14 +28,14 @@ import java.util.List;
  */
 public class DriverHistoryFragment extends android.app.Fragment {
 
-    private FirebaseFirestore firestoreDB;
-    private RecyclerView mDhistory;
-    private List<driverHistory> dHistory;
-    private driverHistory driverHistory;
-    private driverHistoryAdapter driverHistoryAdapter;
-    private String driverID;
-    private String TAG;
-    private FirebaseAuth mAuth;
+        private FirebaseFirestore firestoreDB;
+        private RecyclerView mDhistory;
+        private List<driverHistory> dHistory;
+        private driverHistory driverHistory;
+        private driverHistoryAdapter driverHistoryAdapter;
+        private String driverID;
+        private String TAG;
+        private FirebaseAuth mAuth;
 
 
     public DriverHistoryFragment() {
