@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 
@@ -25,6 +26,7 @@ public class driverHistoryAdapter extends RecyclerView.Adapter<driverHistoryAdap
     private String mydate;
     private String mytime;
     private Date date;
+    private float ridestars;
 
     public driverHistoryAdapter(Context context, List<driverHistory> dHistory){
 
@@ -62,6 +64,7 @@ public class driverHistoryAdapter extends RecyclerView.Adapter<driverHistoryAdap
         holder.mPaymentStatus.setText(dHistory.get(position).getSettlement());
         holder.mPaidVia.setText(dHistory.get(position).getPaidvia());
         holder.mfare.setText(dHistory.get(position).getRidefare());
+        holder.mRideRating.setRating(dHistory.get(position).getRidestars());
         holder.mdate.setText(mydate);
         holder.mtime.setText(mytime);
 
@@ -78,7 +81,7 @@ public class driverHistoryAdapter extends RecyclerView.Adapter<driverHistoryAdap
 
         View mView;
         public TextView mName,mPickup,mDrop,mPhone, mstatus, mDiscription, mBoxes, mRideDistance,mWeight, mPaymentStatus,mPaidVia, mfare, mtime, mdate;
-
+        public RatingBar mRideRating;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -97,7 +100,7 @@ public class driverHistoryAdapter extends RecyclerView.Adapter<driverHistoryAdap
             mfare=(TextView)mView.findViewById(R.id.dh_fare);
             mtime=(TextView)mView.findViewById(R.id.dh_time);
             mdate=(TextView)mView.findViewById(R.id.dh_date);
-
+            mRideRating=(RatingBar)mView.findViewById(R.id.rideratingbar);
         }
     }
     }

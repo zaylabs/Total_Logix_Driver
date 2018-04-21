@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.Toast;
 
 import com.example.raza.total_logix_driver.DTO.driverProfile;
@@ -62,6 +63,7 @@ public class profileFragment extends android.app.Fragment implements View.OnClic
     private String email;
     private String cnic;
     private Date updatedate;
+    private RatingBar mRatingBar;
 
     private StorageReference mImageRef;
     private StorageReference mStorageRef;
@@ -73,6 +75,8 @@ public class profileFragment extends android.app.Fragment implements View.OnClic
     private String mImageLink;
     private String reg_number;
     private String vt;
+    private float stars;
+
     public profileFragment() {
         // Required empty public constructor
     }
@@ -92,7 +96,7 @@ public class profileFragment extends android.app.Fragment implements View.OnClic
         userID = mAuth.getCurrentUser().getUid();
         mName = (EditText)view.findViewById(R.id.input_name);
         mPhone = view.findViewById(R.id.input_mobile);
-
+        mRatingBar=view.findViewById(R.id.ratingbar);
         mSave = view.findViewById(R.id.btn_update);
         mChangePassword=view.findViewById(R.id.btn_change_pass);
         mProfilePic=view.findViewById(R.id.profile_pic);
@@ -201,7 +205,8 @@ public class profileFragment extends android.app.Fragment implements View.OnClic
                 createdate=profile.getCurrentDate();
                 reg_number=profile.getReg_number();
                 vt=profile.getVt();
-
+                stars=profile.getStars();
+                mRatingBar.setRating(stars);
             }
         });
 
@@ -214,7 +219,7 @@ public class profileFragment extends android.app.Fragment implements View.OnClic
         String name = mName.getText().toString();
 
         updatedate= Calendar.getInstance().getTime();
-        driverProfile profile = new driverProfile(name, phone, cnic, reg_number, vt, createdate, displaypic);
+        driverProfile profile = new driverProfile(name, phone, cnic, reg_number, vt, createdate, displaypic,stars);
         db.collection("drivers").document(userID).set(profile);
 
     }

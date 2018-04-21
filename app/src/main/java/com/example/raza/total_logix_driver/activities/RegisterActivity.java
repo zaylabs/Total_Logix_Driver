@@ -209,8 +209,9 @@ public class RegisterActivity extends BaseActivity {
 
         Date currentDate = Calendar.getInstance().getTime();
         String displaypic="";
+        float stars=0;
 
-        driverProfile profile = new driverProfile(name, phone,cnic,reg_number, vt, currentDate,displaypic);
+        driverProfile profile = new driverProfile(name, phone,cnic,reg_number, vt, currentDate,displaypic,stars);
 
         db.collection("drivers").document(userID).set(profile);
 

@@ -12,6 +12,7 @@ public class driverProfile {
     private String reg_number;
     private String displaypic;
     private Date currentDate;
+    private float stars;
 
 
 
@@ -19,7 +20,7 @@ public class driverProfile {
     }
 
 
-    public driverProfile(String name, String phone, String cnic, String reg_number, String vt, Date currentDate, String displaypic) {
+    public driverProfile(String name, String phone, String cnic, String reg_number, String vt, Date currentDate, String displaypic, float stars) {
 
         this.name = name;
         this.cnic = cnic;
@@ -28,7 +29,7 @@ public class driverProfile {
         this.reg_number = reg_number;
         this.currentDate = currentDate;
         this.displaypic=displaypic;
-
+        this.stars=stars;
     }
 
 
@@ -87,7 +88,13 @@ public class driverProfile {
         this.displaypic = displaypic;
     }
 
+    public float getStars() {
+        return stars;
+    }
 
+    public void setStars(float stars) {
+        this.stars = stars;
+    }
 }
 
 

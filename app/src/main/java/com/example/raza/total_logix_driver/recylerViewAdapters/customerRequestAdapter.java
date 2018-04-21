@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,7 +62,8 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
     private String carregno;
     private Date date =  Calendar.getInstance().getTime();
     private String uniqueID;
-
+    private float starts;
+    private float ridestars;
     private String mydate, mytime;
     public customerRequestAdapter(Context context, List<customerRequest>cRequests){
         this.cRequests= cRequests;
@@ -100,6 +102,8 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
         Location loc2 = new Location("");
         loc2.setLatitude(mPick.getLatitude());
         loc2.setLongitude(mPick.getLongitude());
+
+       ridestars=0;
         SimpleDateFormat formatter = new SimpleDateFormat("h:mm a", Locale.getDefault());
 
         float distance = loc1.distanceTo(loc2)/1000;
@@ -115,7 +119,7 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
         holder.mWeight.setText(cRequests.get(position).getWeight());
         holder.mDiscription.setText(cRequests.get(position).getDescription());
         holder.mBoxes.setText(cRequests.get(position).getBoxes());
-
+        holder.mRatingBar.setRating(cRequests.get(position).getStars());
         final String user_id = cRequests.get(position).userId;
         holder.mDistance.setText(String.valueOf(distance)+"KM");
         uniqueID = cRequests.get(position).getUniqueID();
@@ -142,8 +146,8 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
                             DocumentSnapshot document = task.getResult();
                             if (document != null && document.exists()) {
 
-                                driverHistory driverHistory = new driverHistory(cRequests.get(position).getName(), cRequests.get(position).getPickup(), cRequests.get(position).getDrop(),null,null, cRequests.get(position).getPhone(), cRequests.get(position).getDate(), cRequests.get(position).getCID(), cRequests.get(position).getVT(), cRequests.get(position).getWeight(), cRequests.get(position).getBoxes(), cRequests.get(position).getDescription(), cRequests.get(position).getDriverloading(), cRequests.get(position).getRidedistance(), cRequests.get(position).getPickupaddress(), cRequests.get(position).getDropaddress(),cRequests.get(position).getEstFare(), drivername, driverdp, drivernic, driverphone, driverLocation, carregno, userID, "Pending",null, null,null,null,uniqueID,"Pending");
-                                acceptRequest acceptRequest = new acceptRequest(cRequests.get(position).getName(), cRequests.get(position).getPickup(), cRequests.get(position).getDrop(),null,null, cRequests.get(position).getPhone(), cRequests.get(position).getDate(), cRequests.get(position).getCID(), cRequests.get(position).getVT(), cRequests.get(position).getWeight(), cRequests.get(position).getBoxes(), cRequests.get(position).getDescription(), cRequests.get(position).getDriverloading(), cRequests.get(position).getRidedistance(), cRequests.get(position).getPickupaddress(), cRequests.get(position).getDropaddress(),cRequests.get(position).getEstFare(), drivername, driverdp, drivernic, driverphone, driverLocation, carregno, userID,"Pending",null, null,null,date,null,uniqueID);
+                                driverHistory driverHistory = new driverHistory(cRequests.get(position).getName(), cRequests.get(position).getPickup(), cRequests.get(position).getDrop(),null,null, cRequests.get(position).getPhone(), cRequests.get(position).getDate(), cRequests.get(position).getCID(), cRequests.get(position).getVT(), cRequests.get(position).getWeight(), cRequests.get(position).getBoxes(), cRequests.get(position).getDescription(), cRequests.get(position).getDriverloading(), cRequests.get(position).getRidedistance(), cRequests.get(position).getPickupaddress(), cRequests.get(position).getDropaddress(),cRequests.get(position).getEstFare(), drivername, driverdp, drivernic, driverphone, driverLocation, carregno, userID, "Pending",null, null,null,null,uniqueID,"Pending",ridestars,cRequests.get(position).getRidedistance());
+                                acceptRequest acceptRequest = new acceptRequest(cRequests.get(position).getName(), cRequests.get(position).getPickup(), cRequests.get(position).getDrop(),null,null, cRequests.get(position).getPhone(), cRequests.get(position).getDate(), cRequests.get(position).getCID(), cRequests.get(position).getVT(), cRequests.get(position).getWeight(), cRequests.get(position).getBoxes(), cRequests.get(position).getDescription(), cRequests.get(position).getDriverloading(), cRequests.get(position).getRidedistance(), cRequests.get(position).getPickupaddress(), cRequests.get(position).getDropaddress(),cRequests.get(position).getEstFare(), drivername, driverdp, drivernic, driverphone, driverLocation, carregno, userID,"Pending",null, null,null,date,null,uniqueID,"Pending",ridestars,cRequests.get(position).getRidedistance());
                                 db.collection("acceptRequest").document(uniqueID).set(acceptRequest);
                                 db.collection("CustomerHistory").document(uniqueID).set(driverHistory);
                                 db.collection("DriverHistory").document(uniqueID).set(driverHistory);
@@ -199,7 +203,8 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
         View mView;
         public TextView mName,mPickup,mDrop,mPhone, mDistance,  mRideDistance,mDate,mTime, mDiscription,mWeight,mBoxes;
         public Button mAccept, mSkip;
-
+        public RatingBar mRatingBar;
+        public RatingBar mRideRating;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -217,6 +222,7 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
             mDiscription=(TextView)mView.findViewById(R.id.description);
             mBoxes=(TextView)mView.findViewById(R.id.Boxes);
             mWeight=(TextView)mView.findViewById(R.id.weight);
+            mRatingBar=(RatingBar)mView.findViewById(R.id.c_rating);
 
         }
     }

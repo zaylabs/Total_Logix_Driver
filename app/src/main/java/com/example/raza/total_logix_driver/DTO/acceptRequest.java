@@ -37,12 +37,14 @@ public class acceptRequest {
     private Date statusdate;
     private Float waitingtime;
     private String uniqueID;
-
+    private String settlement;
+    private float ridestars;
+    private float estDistance;
     acceptRequest(){
 
     }
 
-    public acceptRequest(String name, GeoPoint originalpickup, GeoPoint originaldrop, GeoPoint actualpickup, GeoPoint actualdrop, String phone, Date date, String CID, String VT, String weight, String boxes , String description, String driverloading, Float ridedistance, String pickupaddress, String dropaddress, String estFare, String drivername, String driverdp, String drivernic, String driverphone, GeoPoint driverlocation, String carregno, String driverid, String status, String ridefare, String paidvia, String paymentstatus, Date statusdate, Float waitingtime, String uniqueID ){
+    public acceptRequest(String name, GeoPoint originalpickup, GeoPoint originaldrop, GeoPoint actualpickup, GeoPoint actualdrop, String phone, Date date, String CID, String VT, String weight, String boxes , String description, String driverloading, Float ridedistance, String pickupaddress, String dropaddress, String estFare, String drivername, String driverdp, String drivernic, String driverphone, GeoPoint driverlocation, String carregno, String driverid, String status, String ridefare, String paidvia, String paymentstatus, Date statusdate, Float waitingtime, String uniqueID,String settlement  ,float ridestars, float estDistance ){
 
         this.name = name;
         this.originalpickup = originalpickup;
@@ -76,6 +78,8 @@ public class acceptRequest {
         this.uniqueID=uniqueID;
         this.statusdate=statusdate;
         this.waitingtime=waitingtime;
+        this.settlement=settlement;
+        this.estDistance=estDistance;
     }
 
     public String getName() {
@@ -325,6 +329,31 @@ public class acceptRequest {
 
     public void setEstFare(String estFare) {
         this.estFare = estFare;
+    }
+
+    public float getRidestars() {
+        return ridestars;
+    }
+
+    public void setRidestars(float ridestars) {
+        this.ridestars = ridestars;
+    }
+
+    public String getSettlement() {
+        return settlement;
+    }
+
+    public float getEstDistance() {
+        return estDistance;
+    }
+
+    public void setEstDistance(float estDistance) {
+        this.estDistance = estDistance;
+    }
+
+    public void setSettlement(String settlement) {
+        this.settlement = settlement;
+
     }
 }
 

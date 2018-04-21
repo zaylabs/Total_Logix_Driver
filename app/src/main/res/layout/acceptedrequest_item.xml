@@ -146,7 +146,6 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-
                         <TextView
 
                             android:layout_width="match_parent"
@@ -155,43 +154,17 @@
                             android:layout_marginStart="5dp"
                             android:gravity="start"
                             android:padding="1dp"
-                            android:text="@string/distance" />
+                            android:text="@string/weight" />
 
                         <TextView android:textStyle="bold"
-                            android:id="@+id/distancefrom"
+                            android:id="@+id/weight"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
                             android:layout_marginStart="5dp"
                             android:gravity="start"
                             android:padding="1dp"
-                            android:text="@string/Sample_km_Away" />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-
-                        <TextView
-
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:layout_marginStart="5dp"
-                            android:gravity="start"
-                            android:padding="1dp"
-                            android:text="@string/date" />
-
-                        <TextView android:textStyle="bold"
-                            android:id="@+id/date"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:layout_marginStart="5dp"
-                            android:gravity="start"
-                            android:padding="1dp"
-                            android:text="@string/sample_date" />
+                            android:text="@string/_12_kg" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -207,17 +180,40 @@
                             android:layout_marginStart="5dp"
                             android:gravity="start"
                             android:padding="1dp"
-                            android:text="@string/time" />
+                            android:text="@string/cargo_type" />
 
                         <TextView android:textStyle="bold"
-                            android:id="@+id/time"
+                            android:id="@+id/description"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
                             android:layout_marginStart="5dp"
                             android:gravity="start"
                             android:padding="1dp"
-                            android:text="@string/sample_time" />
+                            android:text="@string/cargo_type_sample" />
+                        <TextView
+
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:gravity="start"
+                            android:padding="1dp"
+                            android:text="@string/boxes"
+                            tools:gravity="start" />
+
+
+                        <TextView
+                            android:id="@+id/Boxes"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:gravity="start"
+                            android:padding="1dp"
+                            android:text="@string/sample_boxes"
+                            android:textStyle="bold"
+                            tools:gravity="start" />
+
+
                     </LinearLayout>
 
                 </LinearLayout>
@@ -294,6 +290,34 @@
                         android:text="@string/sample_phone"
                         android:textStyle="bold"
                         tools:gravity="end" />
+
+                    <TextView
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:gravity="end"
+                        android:padding="1dp"
+                        android:text="@string/customer_rating"
+                        tools:gravity="end" />
+
+
+                    <RatingBar
+                        android:id="@+id/c_rating"
+                        style="?android:attr/ratingBarStyleSmall"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="5dp"
+                        android:gravity="end"
+                        android:numStars="@integer/starts"
+                        android:padding="1dp"
+                        android:text="@string/sample_phone"
+                        android:textStyle="bold"
+                        tools:gravity="end"
+                        android:clickable="false"
+                        android:isIndicator="true"
+                        />
+
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/lride"
@@ -303,27 +327,7 @@
                     android:layout_below="@+id/lphone"
                     android:orientation="vertical">
 
-                    <TextView
 
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="5dp"
-                        android:gravity="end"
-                        android:padding="1dp"
-                        android:text="@string/est_distance"
-                        tools:gravity="end" />
-
-
-                    <TextView
-                        android:id="@+id/txt_est_distance"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="5dp"
-                        android:gravity="end"
-                        android:padding="1dp"
-                        android:text="@string/sample_distance"
-                        android:textStyle="bold"
-                        tools:gravity="end" />
                 </LinearLayout>
 
             </RelativeLayout>
@@ -348,6 +352,13 @@
                     android:orientation="vertical">
 
 
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
                     <TextView
 
                         android:layout_width="match_parent"
@@ -356,17 +367,17 @@
                         android:layout_marginStart="5dp"
                         android:gravity="start"
                         android:padding="1dp"
-                        android:text="@string/weight" />
+                        android:text="@string/date" />
 
                     <TextView android:textStyle="bold"
-                        android:id="@+id/weight"
+                        android:id="@+id/date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
                         android:layout_marginStart="5dp"
                         android:gravity="start"
                         android:padding="1dp"
-                        android:text="@string/_12_kg" />
+                        android:text="@string/sample_date" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -382,17 +393,16 @@
                         android:layout_marginStart="5dp"
                         android:gravity="start"
                         android:padding="1dp"
-                        android:text="@string/cargo_type" />
-
+                        android:text="@string/time" />
                     <TextView android:textStyle="bold"
-                        android:id="@+id/description"
+                        android:id="@+id/time"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
                         android:layout_marginStart="5dp"
                         android:gravity="start"
                         android:padding="1dp"
-                        android:text="@string/cargo_type_sample" />
+                        android:text="@string/sample_time" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -424,20 +434,40 @@
                     android:layout_marginEnd="5dp"
                     android:gravity="end"
                     android:padding="1dp"
-                    android:text="@string/boxes"
+                    android:text="@string/est_distance"
                     tools:gravity="end" />
 
 
                 <TextView
-                    android:id="@+id/Boxes"
+                    android:id="@+id/txt_est_distance"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
                     android:gravity="end"
                     android:padding="1dp"
-                    android:text="@string/sample_boxes"
+                    android:text="@string/sample_distance"
                     android:textStyle="bold"
                     tools:gravity="end" />
+                <TextView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="5dp"
+                    android:gravity="end"
+                    android:padding="1dp"
+                    android:text="@string/distance" />
+
+                <TextView android:textStyle="bold"
+                    android:id="@+id/distancefrom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="5dp"
+                    android:gravity="end"
+                    android:padding="1dp"
+                    android:text="@string/Sample_km_Away" />
+
             </LinearLayout>
 
 

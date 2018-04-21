@@ -38,12 +38,13 @@ public class driverHistory {
     private Float waitingtime;
     private String uniqueID;
     private String settlement;
-
+    private float ridestars;
+    private float estDistance;
     driverHistory(){
 
         }
 
-        public driverHistory (String name, GeoPoint originalpickup, GeoPoint originaldrop, GeoPoint actualpickup, GeoPoint actualdrop, String phone, Date date, String CID, String VT, String weight, String boxes , String description, String driverloading, Float ridedistance, String pickupaddress, String dropaddress, String estFare, String drivername, String driverdp, String drivernic, String driverphone, GeoPoint driverlocation, String carregno, String driverid, String status, String ridefare, String paidvia, String paymentstatus, Float waitingtime, String uniqueID, String settlement){
+        public driverHistory (String name, GeoPoint originalpickup, GeoPoint originaldrop, GeoPoint actualpickup, GeoPoint actualdrop, String phone, Date date, String CID, String VT, String weight, String boxes , String description, String driverloading, Float ridedistance, String pickupaddress, String dropaddress, String estFare, String drivername, String driverdp, String drivernic, String driverphone, GeoPoint driverlocation, String carregno, String driverid, String status, String ridefare, String paidvia, String paymentstatus, Float waitingtime, String uniqueID, String settlement, float ridestars, float estDistance){
 
             this.name = name;
             this.originalpickup = originalpickup;
@@ -76,7 +77,9 @@ public class driverHistory {
             this.uniqueID=uniqueID;
             this.waitingtime=waitingtime;
             this.settlement=settlement;
-        }
+            this.ridestars=ridestars;
+            this.estDistance=estDistance;
+    }
 
     public String getName() {
         return name;
@@ -325,6 +328,22 @@ public class driverHistory {
 
     public void setSettlement(String settlement) {
         this.settlement = settlement;
+    }
+
+    public float getRidestars() {
+        return ridestars;
+    }
+
+    public void setRidestars(float ridestars) {
+        this.ridestars = ridestars;
+    }
+
+    public float getEstDistance() {
+        return estDistance;
+    }
+
+    public void setEstDistance(float estDistance) {
+        this.estDistance = estDistance;
     }
 }
 
