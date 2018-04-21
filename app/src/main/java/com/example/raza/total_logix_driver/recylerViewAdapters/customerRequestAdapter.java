@@ -2,6 +2,7 @@ package com.example.raza.total_logix_driver.recylerViewAdapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.icu.text.TimeZoneFormat;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -31,9 +32,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class customerRequestAdapter extends RecyclerView.Adapter<customerRequestAdapter.ViewHolder> {
@@ -57,8 +61,8 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
     private String carregno;
     private Date date =  Calendar.getInstance().getTime();
     private String uniqueID;
-    private String mDiscription, mBoxes, mWeight;
 
+    private String mydate, mytime;
     public customerRequestAdapter(Context context, List<customerRequest>cRequests){
         this.cRequests= cRequests;
         this.context = context;
@@ -80,9 +84,6 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
 
         userID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
 
-        mWeight=cRequests.get(position).getWeight();
-        mBoxes=cRequests.get(position).getBoxes();
-        mDiscription=cRequests.get(position).getDescription();
         GeoPoint mPick = cRequests.get(position).getPickup();
         mCurrentLocation= ((HomeActivity) context).mCurrentLocation;
         drivername= ((HomeActivity) context).driverName;
@@ -99,14 +100,21 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
         Location loc2 = new Location("");
         loc2.setLatitude(mPick.getLatitude());
         loc2.setLongitude(mPick.getLongitude());
+        SimpleDateFormat formatter = new SimpleDateFormat("h:mm a", Locale.getDefault());
 
         float distance = loc1.distanceTo(loc2)/1000;
-
+        mydate =DateFormat.getDateInstance().format(cRequests.get(position).getDate());
+        mytime = formatter.format(cRequests.get(position).getDate());
         holder.mName.setText(cRequests.get(position).getName());
         holder.mPickup.setText(cRequests.get(position).getPickupaddress());
         holder.mDrop.setText(cRequests.get(position).getDropaddress());
         holder.mPhone.setText(cRequests.get(position).getPhone());
         holder.mRideDistance.setText(String.valueOf(cRequests.get(position).getRidedistance()));
+        holder.mDate.setText(mydate);
+        holder.mTime.setText(mytime);
+        holder.mWeight.setText(cRequests.get(position).getWeight());
+        holder.mDiscription.setText(cRequests.get(position).getDescription());
+        holder.mBoxes.setText(cRequests.get(position).getBoxes());
 
         final String user_id = cRequests.get(position).userId;
         holder.mDistance.setText(String.valueOf(distance)+"KM");
@@ -134,7 +142,7 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
                             DocumentSnapshot document = task.getResult();
                             if (document != null && document.exists()) {
 
-                                driverHistory driverHistory = new driverHistory(cRequests.get(position).getName(), cRequests.get(position).getPickup(), cRequests.get(position).getDrop(),null,null, cRequests.get(position).getPhone(), cRequests.get(position).getDate(), cRequests.get(position).getCID(), cRequests.get(position).getVT(), cRequests.get(position).getWeight(), cRequests.get(position).getBoxes(), cRequests.get(position).getDescription(), cRequests.get(position).getDriverloading(), cRequests.get(position).getRidedistance(), cRequests.get(position).getPickupaddress(), cRequests.get(position).getDropaddress(),cRequests.get(position).getEstFare(), drivername, driverdp, drivernic, driverphone, driverLocation, carregno, userID, "Pending",null, null,null,null,uniqueID);
+                                driverHistory driverHistory = new driverHistory(cRequests.get(position).getName(), cRequests.get(position).getPickup(), cRequests.get(position).getDrop(),null,null, cRequests.get(position).getPhone(), cRequests.get(position).getDate(), cRequests.get(position).getCID(), cRequests.get(position).getVT(), cRequests.get(position).getWeight(), cRequests.get(position).getBoxes(), cRequests.get(position).getDescription(), cRequests.get(position).getDriverloading(), cRequests.get(position).getRidedistance(), cRequests.get(position).getPickupaddress(), cRequests.get(position).getDropaddress(),cRequests.get(position).getEstFare(), drivername, driverdp, drivernic, driverphone, driverLocation, carregno, userID, "Pending",null, null,null,null,uniqueID,"Pending");
                                 acceptRequest acceptRequest = new acceptRequest(cRequests.get(position).getName(), cRequests.get(position).getPickup(), cRequests.get(position).getDrop(),null,null, cRequests.get(position).getPhone(), cRequests.get(position).getDate(), cRequests.get(position).getCID(), cRequests.get(position).getVT(), cRequests.get(position).getWeight(), cRequests.get(position).getBoxes(), cRequests.get(position).getDescription(), cRequests.get(position).getDriverloading(), cRequests.get(position).getRidedistance(), cRequests.get(position).getPickupaddress(), cRequests.get(position).getDropaddress(),cRequests.get(position).getEstFare(), drivername, driverdp, drivernic, driverphone, driverLocation, carregno, userID,"Pending",null, null,null,date,null,uniqueID);
                                 db.collection("acceptRequest").document(uniqueID).set(acceptRequest);
                                 db.collection("CustomerHistory").document(uniqueID).set(driverHistory);
@@ -143,6 +151,7 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
+                                                Log.d(TAG, "DocumentSnapshot successfully deleted!");
                                                 Log.d(TAG, "DocumentSnapshot successfully deleted!");
                                                 Intent intent = new Intent(context,Current_Ride_Activity.class);
                                                 context.startActivity(intent);
@@ -188,7 +197,7 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         View mView;
-        public TextView mName,mPickup,mDrop,mPhone, mDistance,  mRideDistance,mDate,mTime;
+        public TextView mName,mPickup,mDrop,mPhone, mDistance,  mRideDistance,mDate,mTime, mDiscription,mWeight,mBoxes;
         public Button mAccept, mSkip;
 
 
@@ -205,10 +214,10 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
             mRideDistance=(TextView)mView.findViewById(R.id.txt_est_distance);
             mDate=(TextView)mView.findViewById(R.id.date);
             mTime=(TextView)mView.findViewById(R.id.time);
-            /*mDiscription=(TextView)mView.findViewById(R.id.description);
+            mDiscription=(TextView)mView.findViewById(R.id.description);
             mBoxes=(TextView)mView.findViewById(R.id.Boxes);
             mWeight=(TextView)mView.findViewById(R.id.weight);
-*/
+
         }
     }
 

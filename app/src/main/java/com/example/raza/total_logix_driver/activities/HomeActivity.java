@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -17,6 +18,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -29,14 +32,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.raza.total_logix_driver.BuildConfig;
+import com.example.raza.total_logix_driver.DTO.customerRequest;
 import com.example.raza.total_logix_driver.DTO.driverAvailable;
 import com.example.raza.total_logix_driver.DTO.driverProfile;
 import com.example.raza.total_logix_driver.R;
+import com.example.raza.total_logix_driver.fragment.DriverHistoryFragment;
+import com.example.raza.total_logix_driver.fragment.profileFragment;
+import com.example.raza.total_logix_driver.recylerViewAdapters.customerRequestAdapter;
 import com.example.raza.total_logix_driver.suportclasses.PermissionUtils;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -63,14 +71,20 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static android.view.View.GONE;
 
@@ -188,7 +202,8 @@ public class HomeActivity extends BaseActivity
 
     private FirebaseAuth.AuthStateListener firebaseAuthListener;
 
-    public FrameLayout mFooter;
+    public FrameLayout mJobList;
+    public RelativeLayout mFooter;
     private FirebaseAuth mAuth;
     public String userID;
 
@@ -204,7 +219,12 @@ public class HomeActivity extends BaseActivity
     public String driverEmail;
     private TextView mName, mOnline;
     private de.hdodenhof.circleimageview.CircleImageView mUserdp;
-
+    private List<customerRequest> cRequests;
+    private customerRequestAdapter customerRequestAdapter;
+    private RecyclerView mListview;
+    private customerRequest request;
+    private String user_id;
+    private String TAG = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -234,6 +254,16 @@ public class HomeActivity extends BaseActivity
                 }
             }
         };
+
+        mFooter=findViewById(R.id.footer);
+        mJobList=findViewById(R.id.joblistframe);
+        cRequests = new ArrayList<>();
+        customerRequestAdapter = new customerRequestAdapter(this, cRequests);
+        mListview = (RecyclerView) findViewById(R.id.mListView);
+        mListview.setHasFixedSize(true);
+
+        mListview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        mListview.setAdapter(customerRequestAdapter);
 
 // *********************Location Update ************************************
 
@@ -299,11 +329,55 @@ public class HomeActivity extends BaseActivity
     }
 
 
-    private void connectDriver() {
+    public void viewJobList() {
+
+        firestoreDB.collection("customerRequest").whereEqualTo("vt", mVahicleType).addSnapshotListener(new EventListener<QuerySnapshot>() {
+
+            @Override
+            public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.d(TAG, "Error:" + e.getMessage());
+                }
+                for (DocumentChange doc : queryDocumentSnapshots.getDocumentChanges()) {
+                    switch (doc.getType()) {
+                        case ADDED:
+                            user_id = doc.getDocument().getId();
+                            request = doc.getDocument().toObject(customerRequest.class).withID(user_id);
+                            cRequests.add(request);
+                            customerRequestAdapter.notifyDataSetChanged();
+                            break;
+                        case MODIFIED:
+                            user_id = doc.getDocument().getId();
+                            request = doc.getDocument().toObject(customerRequest.class).withID(user_id);
+                            cRequests.add(request);
+                            customerRequestAdapter.notifyDataSetChanged();
+                            break;
+                        case REMOVED:
+                            cRequests.remove(request);
+                            customerRequestAdapter.notifyDataSetChanged();
+                            break;
+                    }
+
+                }
+                mJobList.setVisibility(View.VISIBLE);
+
+            }
+        });
+    }
+
+        private void connectDriver() {
         Toast.makeText(HomeActivity.this, "Driver Available" + mVahicleType, Toast.LENGTH_SHORT).show();
         mOnline.setText(R.string.online);
         mRequestingLocationUpdates = true;
         startLocationUpdates();
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    // Do something after 5s = 5000ms
+                    viewJobList();
+                }
+        }, 10000);
 
     }
 
@@ -347,7 +421,7 @@ public class HomeActivity extends BaseActivity
                         Log.w(TAGLoc, "Error deleting document", e);
                     }
                 });
-
+        mJobList.setVisibility(View.GONE);
     }
     private void getUserInfo(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -422,13 +496,14 @@ public class HomeActivity extends BaseActivity
         // Handle navigation view item clicks here.
         FragmentManager fm = getFragmentManager();
         android.support.v4.app.FragmentManager sFm = getSupportFragmentManager();
-
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
         int id = item.getItemId();
         if (sMapFragment.isAdded())
             sFm.beginTransaction().hide(sMapFragment).commit();
 
         switch (item.getItemId()) {
             case R.id.home:
+
                 if (!sMapFragment.isAdded()){
                     sFm.beginTransaction().add(R.id.map, sMapFragment).commit();
                 }
@@ -436,10 +511,18 @@ public class HomeActivity extends BaseActivity
                 sFm.beginTransaction().show(sMapFragment).commit();
                 }
 
+                if (mWorkingSwitch.isChecked()) {
+                    connectDriver();
+                } else {
+                    disconnectDriver();
+                }
+                mFooter.setVisibility(View.VISIBLE);
                 break;
 
             case R.id.completed_rides:
-
+                hideFooter();
+                ft.replace(R.id.cm, new DriverHistoryFragment());
+                ft.commit();
                 break;
             case R.id.cancelled:
 
@@ -448,8 +531,11 @@ public class HomeActivity extends BaseActivity
 
                 break;
             case R.id.profile:
-
+                hideFooter();
+                ft.replace(R.id.cm, new profileFragment());
+                ft.commit();
                 break;
+
             case R.id.help:
 
                 break;
@@ -465,6 +551,12 @@ public class HomeActivity extends BaseActivity
                 else{
                     sFm.beginTransaction().show(sMapFragment).commit();
                 }
+                if (mWorkingSwitch.isChecked()) {
+                    connectDriver();
+                } else {
+                    disconnectDriver();
+                }
+                mFooter.setVisibility(View.VISIBLE);
                 break;
         }
 
@@ -474,6 +566,7 @@ public class HomeActivity extends BaseActivity
     }
 
     private void hideFooter() {
+        mJobList.setVisibility(GONE);
         mFooter.setVisibility(GONE);
     }
 

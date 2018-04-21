@@ -37,12 +37,13 @@ public class driverHistory {
     private String paymentstatus;
     private Float waitingtime;
     private String uniqueID;
+    private String settlement;
 
     driverHistory(){
 
         }
 
-        public driverHistory (String name, GeoPoint originalpickup, GeoPoint originaldrop, GeoPoint actualpickup, GeoPoint actualdrop, String phone, Date date, String CID, String VT, String weight, String boxes , String description, String driverloading, Float ridedistance, String pickupaddress, String dropaddress, String estFare, String drivername, String driverdp, String drivernic, String driverphone, GeoPoint driverlocation, String carregno, String driverid, String status, String ridefare, String paidvia, String paymentstatus, Float waitingtime, String uniqueID){
+        public driverHistory (String name, GeoPoint originalpickup, GeoPoint originaldrop, GeoPoint actualpickup, GeoPoint actualdrop, String phone, Date date, String CID, String VT, String weight, String boxes , String description, String driverloading, Float ridedistance, String pickupaddress, String dropaddress, String estFare, String drivername, String driverdp, String drivernic, String driverphone, GeoPoint driverlocation, String carregno, String driverid, String status, String ridefare, String paidvia, String paymentstatus, Float waitingtime, String uniqueID, String settlement){
 
             this.name = name;
             this.originalpickup = originalpickup;
@@ -74,7 +75,7 @@ public class driverHistory {
             this.paymentstatus=paymentstatus;
             this.uniqueID=uniqueID;
             this.waitingtime=waitingtime;
-
+            this.settlement=settlement;
         }
 
     public String getName() {
@@ -316,6 +317,14 @@ public class driverHistory {
 
     public void setActualdrop(GeoPoint actualdrop) {
         this.actualdrop = actualdrop;
+    }
+
+    public String getSettlement() {
+        return settlement;
+    }
+
+    public void setSettlement(String settlement) {
+        this.settlement = settlement;
     }
 }
 

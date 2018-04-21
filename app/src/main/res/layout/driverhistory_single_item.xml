@@ -52,10 +52,12 @@
                             android:layout_gravity="start"
                             android:layout_marginStart="5dp"
                             android:gravity="start"
-                            android:text="@string/from" />
+                            android:text="@string/from"
+                            android:textStyle="bold"
+                            />
 
                         <TextView
-                            android:id="@+id/txt_from_add"
+                            android:id="@+id/dh_from_add"
                             android:layout_width="wrap_content"
                             android:layout_height="0dp"
                             android:layout_gravity="start"
@@ -95,11 +97,13 @@
 
                             android:gravity="end"
                             android:text="@string/to"
-                            tools:gravity="end" />
+                            tools:gravity="end"
+                            android:textStyle="bold"
+                            />
 
 
                         <TextView
-                            android:id="@+id/txt_to_add"
+                            android:id="@+id/dh_to_add"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_marginEnd="5dp"
@@ -155,17 +159,17 @@
                             android:layout_marginStart="5dp"
                             android:gravity="start"
                             android:padding="1dp"
-                            android:text="@string/distance" />
+                            android:text="@string/total_distance" />
 
                         <TextView android:textStyle="bold"
-                            android:id="@+id/distancefrom"
+                            android:id="@+id/dh_totaldistance"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
                             android:layout_marginStart="5dp"
                             android:gravity="start"
                             android:padding="1dp"
-                            android:text="@string/Sample_km_Away" />
+                            android:text="@string/sample_total_distance" />
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -184,7 +188,7 @@
                             android:text="@string/date" />
 
                         <TextView android:textStyle="bold"
-                            android:id="@+id/date"
+                            android:id="@+id/dh_date"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
@@ -210,7 +214,7 @@
                             android:text="@string/time" />
 
                         <TextView android:textStyle="bold"
-                            android:id="@+id/time"
+                            android:id="@+id/dh_time"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
@@ -254,7 +258,7 @@
 
 
                     <TextView
-                        android:id="@+id/txt_customername"
+                        android:id="@+id/dh_customername"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="5dp"
@@ -285,7 +289,7 @@
 
 
                     <TextView
-                        android:id="@+id/txt_phone"
+                        android:id="@+id/dh_phone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="5dp"
@@ -310,168 +314,212 @@
                         android:layout_marginEnd="5dp"
                         android:gravity="end"
                         android:padding="1dp"
-                        android:text="@string/est_distance"
+                        android:text="@string/fare"
                         tools:gravity="end" />
 
 
                     <TextView
-                        android:id="@+id/txt_est_distance"
+                        android:id="@+id/dh_fare"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="5dp"
                         android:gravity="end"
                         android:padding="1dp"
-                        android:text="@string/sample_distance"
+                        android:text="@string/sample_fare"
                         android:textStyle="bold"
                         tools:gravity="end" />
                 </LinearLayout>
 
             </RelativeLayout>
-        <RelativeLayout
-            android:id="@+id/relativecargo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/R_cnp"
-            android:paddingTop="5dp"
-            android:paddingBottom="1dp"
-            >
-            <LinearLayout
+            <RelativeLayout
+                android:id="@+id/relativecargo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_toStartOf="@+id/img_cargo"
-                android:orientation="vertical">
-
+                android:layout_below="@+id/R_cnp"
+                android:paddingTop="5dp"
+                android:paddingBottom="1dp"
+                >
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@+id/img_cargo"
                     android:orientation="vertical">
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+
+                        <TextView
+
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="5dp"
+                            android:gravity="start"
+                            android:padding="1dp"
+                            android:text="@string/weight" />
+
+                        <TextView android:textStyle="bold"
+                            android:id="@+id/dh_weight"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="5dp"
+                            android:gravity="start"
+                            android:padding="1dp"
+                            android:text="@string/_12_kg" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="5dp"
+                            android:gravity="start"
+                            android:padding="1dp"
+                            android:text="@string/cargo_type" />
+
+                        <TextView android:textStyle="bold"
+                            android:id="@+id/dh_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="5dp"
+                            android:gravity="start"
+                            android:padding="1dp"
+                            android:text="@string/cargo_type_sample" />
+
+                        <TextView
+
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="5dp"
+                            android:gravity="start"
+                            android:padding="1dp"
+                            android:text="@string/boxes"
+                            tools:gravity="start" />
+
+
+                        <TextView
+                            android:id="@+id/dh_boxes"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="5dp"
+                            android:gravity="start"
+                            android:padding="1dp"
+                            android:text="@string/sample_boxes"
+                            android:textStyle="bold"
+                             />
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+                <ImageView
+                    android:layout_marginBottom="@dimen/margin_5"
+                    android:id="@+id/img_cargo"
+                    android:layout_width="@dimen/arrow"
+                    android:layout_height="@dimen/arrow"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:src="@mipmap/taxi"
+                    android:contentDescription="@string/arrow"
+                    />
+
+                <LinearLayout
+                    android:id="@+id/Lboxes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_toEndOf="@+id/img_cargo"
+                    android:orientation="vertical"
+                    android:paddingBottom="5dp"
+                    >
 
                     <TextView
 
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:layout_marginStart="5dp"
-                        android:gravity="start"
+                        android:layout_marginEnd="5dp"
+                        android:gravity="end"
                         android:padding="1dp"
-                        android:text="@string/weight" />
-
-                    <TextView android:textStyle="bold"
-                        android:id="@+id/weight"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:layout_marginStart="5dp"
-                        android:gravity="start"
-                        android:padding="1dp"
-                        android:text="@string/_12_kg" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                        android:text="@string/status"
+                        tools:gravity="end" />
 
 
                     <TextView
+                        android:id="@+id/dh__status"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:layout_marginStart="5dp"
-                        android:gravity="start"
+                        android:layout_marginEnd="5dp"
+                        android:gravity="end"
                         android:padding="1dp"
-                        android:text="@string/cargo_type" />
+                        android:text="@string/completed"
+                        android:textStyle="bold"
+                        tools:gravity="end" />
+                    <TextView
 
-                    <TextView android:textStyle="bold"
-                        android:id="@+id/description"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:layout_marginStart="5dp"
-                        android:gravity="start"
+                        android:layout_marginEnd="5dp"
+                        android:gravity="end"
                         android:padding="1dp"
-                        android:text="@string/cargo_type_sample" />
+                        android:text="@string/paid_via"
+                        tools:gravity="end" />
+
+
+                    <TextView
+                        android:id="@+id/dh_paidvia"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:gravity="end"
+                        android:padding="1dp"
+                        android:text="@string/cash"
+                        android:textStyle="bold"
+                        tools:gravity="end" />
+
+                    <TextView
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:gravity="end"
+                        android:padding="1dp"
+                        android:text="@string/settlement"
+                        tools:gravity="end" />
+
+
+                    <TextView
+                        android:id="@+id/dh__settlement"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:gravity="end"
+                        android:padding="1dp"
+
+                        android:text="@string/settlement_sample"
+                        android:textStyle="bold"
+                        tools:gravity="end" />
                 </LinearLayout>
 
-            </LinearLayout>
+
+            </RelativeLayout>
 
 
-            <ImageView
-                android:layout_marginBottom="@dimen/margin_5"
-                android:id="@+id/img_cargo"
-                android:layout_width="@dimen/arrow"
-                android:layout_height="@dimen/arrow"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center"
-                android:src="@mipmap/taxi"
-                android:contentDescription="@string/arrow"
-                />
-
-            <LinearLayout
-                android:id="@+id/Lboxes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_toEndOf="@+id/img_cargo"
-                android:orientation="vertical">
-
-                <TextView
-
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
-                    android:gravity="end"
-                    android:padding="1dp"
-                    android:text="@string/boxes"
-                    tools:gravity="end" />
-
-
-                <TextView
-                    android:id="@+id/Boxes"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
-                    android:gravity="end"
-                    android:padding="1dp"
-                    android:text="@string/sample_boxes"
-                    android:textStyle="bold"
-                    tools:gravity="end" />
-            </LinearLayout>
-
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/relativecargo"
-            android:paddingTop="0dp"
-            android:paddingBottom="5dp"
-            >
-
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:id="@+id/declinebtn"
-                android:layout_marginStart="70dp"
-                android:text="@string/decline"
-                android:textAlignment="center"
-                android:background="@color/red"
-                />
-            <Button
-
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:id="@+id/acceptbtn"
-                android:layout_marginStart="200dp"
-                android:text="@string/accept"
-                android:textAlignment="center"
-                android:background="@color/green"
-                />
-        </RelativeLayout>
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>

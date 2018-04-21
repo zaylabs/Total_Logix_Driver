@@ -20,6 +20,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
+
     <include layout="@layout/content_home" />
 
 
@@ -32,10 +33,33 @@
         android:layout_marginBottom="0dip"
         android:visibility="visible">
 
-        <include
+
+            <include
             layout="@layout/driver_earning"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+
+
     </RelativeLayout>
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="200dp"
+        android:visibility="gone"
+        android:id="@+id/joblistframe"
+
+        >
+
+        <include
+            layout="@layout/fragment_joblist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            />
+
+    </FrameLayout>
+
 
 </android.support.design.widget.CoordinatorLayout>
