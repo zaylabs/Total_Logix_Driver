@@ -30,6 +30,12 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.time.Month;
+import java.time.Year;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -53,10 +59,19 @@ private Date date =  Calendar.getInstance().getTime();
 private Date waitDate1;
 private Date waitDate2;
 private Float waiting;
-Float distance;
+private String StringWaiting;
+private String gatepass;
+private Float distance;
+private String StringRideDistance;
+private String StringEstDistance;
+private int SuzukiRate;
+private int RikshaRate;
+private int SuzukiBase;
+private int RikshaBase;
+private int DriverLoadingRate;
+private String StringDateTime;
 
-
-public currentRideAdapter(Context context, List<acceptRequest> dHistory){
+    public currentRideAdapter(Context context, List<acceptRequest> dHistory){
 
         this.context = context;
         this.dHistory = dHistory;
@@ -81,42 +96,64 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
 
     userID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
 
-    final DocumentReference docRef = db.collection("driveravailable").document(userID);
-    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-        @Override
-        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document != null && document.exists()) {
-                    CurrentLocation= Objects.requireNonNull(document.toObject(driverAvailable.class)).getDriverLocation();
-                }
-            }
-        }
+    SuzukiRate= 200;
+    RikshaRate=90;
+    SuzukiBase=600;
+    RikshaBase=270;
+    DriverLoadingRate=150;
 
 
-    });
 
-    holder.mName.setText(dHistory.get(position).getName());
+
+        NumberFormat numberFormat = new DecimalFormat("#'Mins'");
+        StringWaiting=numberFormat.format(dHistory.get(position).getWaitingtime());
+        NumberFormat distanceFormat = new DecimalFormat("#'KM'");
+        StringEstDistance=distanceFormat.format(dHistory.get(position).getEstDistance());
+        StringRideDistance=distanceFormat.format(dHistory.get(position).getRidedistance());
+        DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy h:mm a");
+        StringDateTime = dateFormat.format(dHistory.get(position).getDate());
+
+
+
+        holder.mName.setText(dHistory.get(position).getName());
         holder.mPickup.setText(dHistory.get(position).getPickupaddress());
         holder.mDrop.setText(dHistory.get(position).getDropaddress());
         holder.mPhone.setText(dHistory.get(position).getPhone());
         holder.mstatus.setText(dHistory.get(position).getStatus());
-        holder.mRideDistance.setText(String.valueOf(dHistory.get(position).getRidedistance()));
+        holder.mRideDistance.setText(distanceFormat.format(dHistory.get(position).getRidedistance()));
         holder.mDiscription.setText(dHistory.get(position).getDescription());
         holder.mBoxes.setText(dHistory.get(position).getBoxes());
         holder.mWeight.setText(dHistory.get(position).getWeight());
-
+        holder.mWaiting.setText(numberFormat.format(dHistory.get(position).getWaitingtime()));
         holder.mPaidVia.setText(dHistory.get(position).getPaidvia());
         holder.mfare.setText(dHistory.get(position).getRidefare());
-        holder.mEstRideDistance.setText(String.valueOf(dHistory.get(position).getEstDistance()));
-        holder.mDatetime.setText(String.valueOf(dHistory.get(position).getDate()));
+        holder.mEstRideDistance.setText(distanceFormat.format(dHistory.get(position).getEstDistance()));
+        holder.mDatetime.setText(dateFormat.format(dHistory.get(position).getDate()));
+
 
         holder.mReached.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                final DocumentReference docRef = db.collection("driveravailable").document(userID);
+                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document != null && document.exists()) {
+                                CurrentLocation= Objects.requireNonNull(document.toObject(driverAvailable.class)).getDriverLocation();
+                            }
+                        }
+                    }
+
+
+                });
+
                 holder.mReached.setVisibility(View.GONE);
                 holder.mStart.setVisibility(View.VISIBLE);
                 String Status = "Waiting";
+                waitDate1=date;
                 driverHistory driverHistory = new driverHistory(
                         dHistory.get(position).getName(),
                         dHistory.get(position).getOriginalpickup(),
@@ -146,8 +183,8 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                         null,
                         null,
                         null,
-                        null,
-                        dHistory.get(position).getUniqueID(),dHistory.get(position).getSettlement(),dHistory.get(position).getRidestars(),dHistory.get(position).getEstDistance());
+                        0,
+                        dHistory.get(position).getUniqueID(),dHistory.get(position).getSettlement(),dHistory.get(position).getRidestars(),dHistory.get(position).getEstDistance(),dHistory.get(position).getGatepass());
                 acceptRequest acceptRequest = new acceptRequest(
                         dHistory.get(position).getName(),
                         dHistory.get(position).getOriginalpickup(),
@@ -178,8 +215,8 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                         null,
                         null,
                         date,
-                        null,
-                        dHistory.get(position).getUniqueID(),dHistory.get(position).getSettlement(),dHistory.get(position).getRidestars(),dHistory.get(position).getEstDistance()
+                        0,
+                        dHistory.get(position).getUniqueID(),dHistory.get(position).getSettlement(),dHistory.get(position).getRidestars(),dHistory.get(position).getEstDistance(),dHistory.get(position).getGatepass()
                 );
                 db.collection("acceptRequest").document(dHistory.get(position).getUniqueID()).set(acceptRequest);
                 db.collection("CustomerHistory").document(dHistory.get(position).getUniqueID()).set(driverHistory);
@@ -191,12 +228,14 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
         holder.mStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 holder.mStart.setVisibility(View.GONE);
                 holder.mFinish.setVisibility(View.VISIBLE);
-                waitDate1 = dHistory.get(position).getStatusdate();
+
+
                 waitDate2 = date;
-                Float wait = (float) (waitDate1.getTime() - waitDate2.getTime());
-                waiting = (wait % (1000*60*60));
+                Long min=diffTime();
+                waiting = Float.valueOf(diffTime());
 
                 String Status = "On-Ride";
 
@@ -230,7 +269,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                         null,
                         null,
                         waiting,
-                        dHistory.get(position).getUniqueID(),dHistory.get(position).getSettlement(),dHistory.get(position).getRidestars(),dHistory.get(position).getEstDistance());
+                        dHistory.get(position).getUniqueID(),dHistory.get(position).getSettlement(),dHistory.get(position).getRidestars(),dHistory.get(position).getEstDistance(),dHistory.get(position).getGatepass());
                 acceptRequest acceptRequest = new acceptRequest(
                         dHistory.get(position).getName(),
                         dHistory.get(position).getOriginalpickup(),
@@ -262,7 +301,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                         null,
                         dHistory.get(position).getStatusdate(),
                         waiting,
-                        dHistory.get(position).getUniqueID(),dHistory.get(position).getSettlement(),dHistory.get(position).getRidestars(),dHistory.get(position).getEstDistance()
+                        dHistory.get(position).getUniqueID(),dHistory.get(position).getSettlement(),dHistory.get(position).getRidestars(),dHistory.get(position).getEstDistance(),dHistory.get(position).getGatepass()
                 );
 
                 db.collection("acceptRequest").document(dHistory.get(position).getUniqueID()).set(acceptRequest);
@@ -275,6 +314,21 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
         holder.mFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final DocumentReference docRef = db.collection("driveravailable").document(userID);
+                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document != null && document.exists()) {
+                                CurrentLocation= Objects.requireNonNull(document.toObject(driverAvailable.class)).getDriverLocation();
+                            }
+                        }
+                    }
+
+
+                });
+
                 holder.mFinish.setVisibility(View.GONE);
                 holder.mPayment.setVisibility(View.VISIBLE);
 
@@ -293,21 +347,24 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                 Float b;
                 Float a = distance;
                 if (dHistory.get(position).getVT().contains("Riksha")) {
-                    b = (a * 200) + 600;
+                    b = (a * RikshaRate) + RikshaBase;
                     if (dHistory.get(position).getDriverloading().contains("Diver Loading Needed")) {
-                        result = b + 150;
+                        result = b + DriverLoadingRate;
                     } else {
                         result = b;
                     }}
                 else if (dHistory.get(position).getVT().contains("Suzuki")) {
-                    b = (a * 90) + 270;
+                    b = (a * SuzukiRate) + SuzukiBase;
                     if (dHistory.get(position).getDriverloading().contains("Diver Loading Needed")) {
-                        result = b + 150;
+                        result = b + DriverLoadingRate;
                     } else {
                         result = b;
                     }
                 }
-                final String results = (String.valueOf(result));
+                NumberFormat numberFormat = new DecimalFormat("'Rs.'#");
+
+                final String results = (numberFormat.format(result));
+
                                 driverHistory driverHistory = new driverHistory(
                                         dHistory.get(position).getName(),
                                         dHistory.get(position).getOriginalpickup(),
@@ -338,7 +395,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                                         null,
                                         Status,
                                         dHistory.get(position).getWaitingtime(),
-                                        dHistory.get(position).getUniqueID(),dHistory.get(position).getSettlement(),dHistory.get(position).getRidestars(),dHistory.get(position).getEstDistance());
+                                        dHistory.get(position).getUniqueID(),dHistory.get(position).getSettlement(),dHistory.get(position).getRidestars(),dHistory.get(position).getEstDistance(),dHistory.get(position).getGatepass());
                                 acceptRequest acceptRequest = new acceptRequest(
                                         dHistory.get(position).getName(),
                                         dHistory.get(position).getOriginalpickup(),
@@ -370,7 +427,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                                         Status,
                                         dHistory.get(position).getStatusdate(),
                                         dHistory.get(position).getWaitingtime(),
-                                        dHistory.get(position).getUniqueID(),dHistory.get(position).getSettlement(),dHistory.get(position).getRidestars(),dHistory.get(position).getEstDistance()
+                                        dHistory.get(position).getUniqueID(),dHistory.get(position).getSettlement(),dHistory.get(position).getRidestars(),dHistory.get(position).getEstDistance(),dHistory.get(position).getGatepass()
                                 );
                                 db.collection("acceptRequest").document(dHistory.get(position).getUniqueID()).set(acceptRequest);
                                 db.collection("CustomerHistory").document(dHistory.get(position).getUniqueID()).set(driverHistory);
@@ -414,7 +471,7 @@ public int getItemCount() {
 public class ViewHolder extends RecyclerView.ViewHolder{
 
     View mView;
-    TextView mName,mPickup,mDrop,mPhone, mstatus, mDiscription, mBoxes, mRideDistance,mWeight, mPaymentStatus,mPaidVia, mfare, mDatetime,mEstRideDistance;
+    TextView mName,mPickup,mDrop,mPhone, mstatus, mDiscription, mBoxes, mRideDistance,mWeight, mPaymentStatus,mPaidVia, mfare, mDatetime,mEstRideDistance,mWaiting;
     public Button mReached,mStart, mPayment, mFinish;
 
     ViewHolder(View itemView) {
@@ -437,9 +494,28 @@ public class ViewHolder extends RecyclerView.ViewHolder{
         mPayment= mView.findViewById(R.id.getPaymentbtn);
         mFinish = mView.findViewById(R.id.completebtn);
         mEstRideDistance=mView.findViewById(R.id.cr_estdistance);
+        mWaiting=mView.findViewById(R.id.cr_waiting);
     }
 }
 
- }
+    public long diffTime() {
+        long min = 0;
+        long difference ;
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm aa"); // for 12-hour system, hh should be used instead of HH
+            // There is no minute different between the two, only 8 hours difference. We are not considering Date, So minute will always remain 0
+            /*Date date1 = simpleDateFormat.parse("08:00 AM");
+            Date date2 = simpleDateFormat.parse("04:00 PM");
+*/
+            difference = (waitDate2.getTime() - date.getTime()) / 1000;
+            long hours = difference % (24 * 3600) / 3600; // Calculating Hours
+            long minute = difference % 3600 / 60; // Calculating minutes if there is any minutes difference
+            min = minute + (hours * 60); // This will be our final minutes. Multiplying by 60 as 1 hour contains 60 mins
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        return min;
+    }
+}
 
 

@@ -64,7 +64,7 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
     private String uniqueID;
     private float starts;
     private float ridestars;
-    private String mydate, mytime;
+    private String mydate, mytime, gatepass;
     public customerRequestAdapter(Context context, List<customerRequest>cRequests){
         this.cRequests= cRequests;
         this.context = context;
@@ -104,7 +104,8 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
         loc2.setLongitude(mPick.getLongitude());
 
        ridestars=0;
-        SimpleDateFormat formatter = new SimpleDateFormat("h:mm a", Locale.getDefault());
+        gatepass=cRequests.get(position).getGatepass();
+       SimpleDateFormat formatter = new SimpleDateFormat("h:mm a", Locale.getDefault());
 
         float distance = loc1.distanceTo(loc2)/1000;
         mydate =DateFormat.getDateInstance().format(cRequests.get(position).getDate());
@@ -146,8 +147,8 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
                             DocumentSnapshot document = task.getResult();
                             if (document != null && document.exists()) {
 
-                                driverHistory driverHistory = new driverHistory(cRequests.get(position).getName(), cRequests.get(position).getPickup(), cRequests.get(position).getDrop(),null,null, cRequests.get(position).getPhone(), cRequests.get(position).getDate(), cRequests.get(position).getCID(), cRequests.get(position).getVT(), cRequests.get(position).getWeight(), cRequests.get(position).getBoxes(), cRequests.get(position).getDescription(), cRequests.get(position).getDriverloading(), cRequests.get(position).getRidedistance(), cRequests.get(position).getPickupaddress(), cRequests.get(position).getDropaddress(),cRequests.get(position).getEstFare(), drivername, driverdp, drivernic, driverphone, driverLocation, carregno, userID, "Pending",null, null,null,null,uniqueID,"Pending",ridestars,cRequests.get(position).getRidedistance());
-                                acceptRequest acceptRequest = new acceptRequest(cRequests.get(position).getName(), cRequests.get(position).getPickup(), cRequests.get(position).getDrop(),null,null, cRequests.get(position).getPhone(), cRequests.get(position).getDate(), cRequests.get(position).getCID(), cRequests.get(position).getVT(), cRequests.get(position).getWeight(), cRequests.get(position).getBoxes(), cRequests.get(position).getDescription(), cRequests.get(position).getDriverloading(), cRequests.get(position).getRidedistance(), cRequests.get(position).getPickupaddress(), cRequests.get(position).getDropaddress(),cRequests.get(position).getEstFare(), drivername, driverdp, drivernic, driverphone, driverLocation, carregno, userID,"Pending",null, null,null,date,null,uniqueID,"Pending",ridestars,cRequests.get(position).getRidedistance());
+                                driverHistory driverHistory = new driverHistory(cRequests.get(position).getName(), cRequests.get(position).getPickup(), cRequests.get(position).getDrop(),null,null, cRequests.get(position).getPhone(), cRequests.get(position).getDate(), cRequests.get(position).getCID(), cRequests.get(position).getVT(), cRequests.get(position).getWeight(), cRequests.get(position).getBoxes(), cRequests.get(position).getDescription(), cRequests.get(position).getDriverloading(), cRequests.get(position).getRidedistance(), cRequests.get(position).getPickupaddress(), cRequests.get(position).getDropaddress(),cRequests.get(position).getEstFare(), drivername, driverdp, drivernic, driverphone, driverLocation, carregno, userID, "Pending",null, null,null,0,uniqueID,"Pending",ridestars,cRequests.get(position).getRidedistance(),gatepass);
+                                acceptRequest acceptRequest = new acceptRequest(cRequests.get(position).getName(), cRequests.get(position).getPickup(), cRequests.get(position).getDrop(),null,null, cRequests.get(position).getPhone(), cRequests.get(position).getDate(), cRequests.get(position).getCID(), cRequests.get(position).getVT(), cRequests.get(position).getWeight(), cRequests.get(position).getBoxes(), cRequests.get(position).getDescription(), cRequests.get(position).getDriverloading(), cRequests.get(position).getRidedistance(), cRequests.get(position).getPickupaddress(), cRequests.get(position).getDropaddress(),cRequests.get(position).getEstFare(), drivername, driverdp, drivernic, driverphone, driverLocation, carregno, userID,"Pending",null, null,null,date,0,uniqueID,"Pending",ridestars,cRequests.get(position).getRidedistance(),gatepass);
                                 db.collection("acceptRequest").document(uniqueID).set(acceptRequest);
                                 db.collection("CustomerHistory").document(uniqueID).set(driverHistory);
                                 db.collection("DriverHistory").document(uniqueID).set(driverHistory);

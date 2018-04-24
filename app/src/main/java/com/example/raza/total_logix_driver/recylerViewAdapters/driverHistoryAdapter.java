@@ -27,6 +27,7 @@ public class driverHistoryAdapter extends RecyclerView.Adapter<driverHistoryAdap
     private String mytime;
     private Date date;
     private float ridestars;
+    private String gatepass;
 
     public driverHistoryAdapter(Context context, List<driverHistory> dHistory){
 
@@ -51,6 +52,7 @@ public class driverHistoryAdapter extends RecyclerView.Adapter<driverHistoryAdap
         SimpleDateFormat formatter = new SimpleDateFormat("h:mm a", Locale.getDefault());
         mydate =DateFormat.getDateInstance().format(date);
         mytime = formatter.format(date);
+
 
         holder.mName.setText(dHistory.get(position).getName());
         holder.mPickup.setText(dHistory.get(position).getPickupaddress());

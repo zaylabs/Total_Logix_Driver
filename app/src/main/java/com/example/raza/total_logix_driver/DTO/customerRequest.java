@@ -18,17 +18,18 @@ public class customerRequest extends Userid {
     private String boxes;
     private String description;
     private String driverloading;
-    private Float ridedistance;
+    private float ridedistance;
     private String pickupaddress;
     private String dropaddress;
     private String estFare;
     private String uniqueID;
     private float stars;
+    private String gatepass;
     customerRequest(){
 
     }
 
-    public customerRequest(String name, GeoPoint pickup, GeoPoint drop, String phone, Date date, String CID, String VT, String weight, String boxes , String description, String driverloading, Float ridedistance, String pickupaddress, String dropaddress, String estFare, String uniqueID,float stars){
+    public customerRequest(String name, GeoPoint pickup, GeoPoint drop, String phone, Date date, String CID, String VT, String weight, String boxes , String description, String driverloading, float ridedistance, String pickupaddress, String dropaddress, String estFare, String uniqueID,float stars, String gatepass){
 
         this.name = name;
         this.pickup = pickup;
@@ -47,6 +48,7 @@ public class customerRequest extends Userid {
         this.estFare=estFare;
         this.uniqueID = uniqueID;
         this.stars=stars;
+        this.gatepass=gatepass;
     }
 
     public String getName() {
@@ -137,11 +139,11 @@ public class customerRequest extends Userid {
         this.driverloading = driverloading;
     }
 
-    public Float getRidedistance() {
+    public float getRidedistance() {
         return ridedistance;
     }
 
-    public void setRidedistance(Float ridedistance) {
+    public void setRidedistance(float ridedistance) {
         this.ridedistance = ridedistance;
     }
 
@@ -183,6 +185,14 @@ public class customerRequest extends Userid {
 
     public void setStars(float stars) {
         this.stars = stars;
+    }
+
+    public String getGatepass() {
+        return gatepass;
+    }
+
+    public void setGatepass(String gatepass) {
+        this.gatepass = gatepass;
     }
 }
 

@@ -405,7 +405,7 @@ public class HomeActivity extends BaseActivity
     private void disconnectDriver() {
         Toast.makeText(HomeActivity.this, "Driver Not Available", Toast.LENGTH_SHORT).show();
         mOnline.setText(R.string.driverOffline);
-        stopLocationUpdates();
+
 
         firestoreDB.collection("driveravailable").document(userID)
                 .delete()
@@ -541,7 +541,7 @@ public class HomeActivity extends BaseActivity
                 break;
 
             case R.id.logout:
-
+                mAuth.signOut();
                 break;
 
             default:
@@ -574,6 +574,7 @@ public class HomeActivity extends BaseActivity
     protected void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(firebaseAuthListener);
+        startLocationUpdates();
     }
     @Override
     public void onStop() {
@@ -791,7 +792,7 @@ public class HomeActivity extends BaseActivity
      * Requests location updates from the FusedLocationApi. Note: we don't call this unless location
      * runtime permission has been granted.
      */
-    private void startLocationUpdates() {
+    public void startLocationUpdates() {
         // Begin by checking if the device has the necessary location settings.
         mSettingsClient.checkLocationSettings(mLocationSettingsRequest)
                 .addOnSuccessListener(this, new OnSuccessListener<LocationSettingsResponse>() {
