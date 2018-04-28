@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,7 +28,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.text.DateFormat;
@@ -48,14 +51,16 @@ public class currentRideAdapter extends RecyclerView.Adapter<currentRideAdapter.
 
 private final Context context;
 private final List<acceptRequest> dHistory;
-private Location mCurrentLocation;
+
+
+private GeoPoint DriverLocation;
 private GeoPoint CurrentLocation;
 private GeoPoint OldLocation;
 private FirebaseFirestore db;
 private FirebaseAuth mAuth;
 private String userID;
 private String UniqueID;
-private Date date =  Calendar.getInstance().getTime();
+
 private Date waitDate1;
 private Date waitDate2;
 private Float waiting;
@@ -96,6 +101,13 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
 
     userID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
 
+
+    Location mLocationNow=((HomeActivity)context).mCurrentLocation;
+
+    DriverLocation= new GeoPoint (mLocationNow.getLatitude(),mLocationNow.getLongitude());
+
+    CurrentLocation= new GeoPoint(mLocationNow.getLatitude(),mLocationNow.getLongitude());
+
     SuzukiRate= 200;
     RikshaRate=90;
     SuzukiBase=600;
@@ -107,7 +119,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
 
         NumberFormat numberFormat = new DecimalFormat("#'Mins'");
         StringWaiting=numberFormat.format(dHistory.get(position).getWaitingtime());
-        NumberFormat distanceFormat = new DecimalFormat("#'KM'");
+        NumberFormat distanceFormat = new DecimalFormat("#.##'KM'");
         StringEstDistance=distanceFormat.format(dHistory.get(position).getEstDistance());
         StringRideDistance=distanceFormat.format(dHistory.get(position).getRidedistance());
         DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy h:mm a");
@@ -135,24 +147,17 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
             @Override
             public void onClick(View v) {
 
-                final DocumentReference docRef = db.collection("driveravailable").document(userID);
-                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document != null && document.exists()) {
-                                CurrentLocation= Objects.requireNonNull(document.toObject(driverAvailable.class)).getDriverLocation();
-                            }
-                        }
-                    }
 
-
-                });
 
                 holder.mReached.setVisibility(View.GONE);
                 holder.mStart.setVisibility(View.VISIBLE);
                 String Status = "Waiting";
+                Location mLocationNow=((HomeActivity)context).mCurrentLocation;
+
+                DriverLocation= new GeoPoint (mLocationNow.getLatitude(),mLocationNow.getLongitude());
+
+                CurrentLocation= new GeoPoint(mLocationNow.getLatitude(),mLocationNow.getLongitude());
+                Date date =  Calendar.getInstance().getTime();
                 waitDate1=date;
                 driverHistory driverHistory = new driverHistory(
                         dHistory.get(position).getName(),
@@ -176,7 +181,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                         dHistory.get(position).getDriverdp(),
                         dHistory.get(position).getDrivernic(),
                         dHistory.get(position).getDriverphone(),
-                        dHistory.get(position).getDriverlocation(),
+                        DriverLocation,
                         dHistory.get(position).getCarregno(),
                         dHistory.get(position).getDriverid(),
                         Status,
@@ -207,7 +212,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                         dHistory.get(position).getDriverdp(),
                         dHistory.get(position).getDrivernic(),
                         dHistory.get(position).getDriverphone(),
-                        dHistory.get(position).getDriverlocation(),
+                        DriverLocation,
                         dHistory.get(position).getCarregno(),
                         dHistory.get(position).getDriverid(),
                         Status,
@@ -229,11 +234,17 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
             @Override
             public void onClick(View v) {
 
+
                 holder.mStart.setVisibility(View.GONE);
                 holder.mFinish.setVisibility(View.VISIBLE);
 
+                Location mLocationNow=((HomeActivity)context).mCurrentLocation;
 
-                waitDate2 = date;
+                DriverLocation= new GeoPoint (mLocationNow.getLatitude(),mLocationNow.getLongitude());
+
+                CurrentLocation= new GeoPoint(mLocationNow.getLatitude(),mLocationNow.getLongitude());
+
+
                 Long min=diffTime();
                 waiting = Float.valueOf(diffTime());
 
@@ -261,7 +272,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                         dHistory.get(position).getDriverdp(),
                         dHistory.get(position).getDrivernic(),
                         dHistory.get(position).getDriverphone(),
-                        dHistory.get(position).getDriverlocation(),
+                        DriverLocation,
                         dHistory.get(position).getCarregno(),
                         dHistory.get(position).getDriverid(),
                         Status,
@@ -292,7 +303,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                         dHistory.get(position).getDriverdp(),
                         dHistory.get(position).getDrivernic(),
                         dHistory.get(position).getDriverphone(),
-                        dHistory.get(position).getDriverlocation(),
+                        DriverLocation,
                         dHistory.get(position).getCarregno(),
                         dHistory.get(position).getDriverid(),
                         Status,
@@ -314,23 +325,15 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
         holder.mFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final DocumentReference docRef = db.collection("driveravailable").document(userID);
-                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document != null && document.exists()) {
-                                CurrentLocation= Objects.requireNonNull(document.toObject(driverAvailable.class)).getDriverLocation();
-                            }
-                        }
-                    }
-
-
-                });
 
                 holder.mFinish.setVisibility(View.GONE);
                 holder.mPayment.setVisibility(View.VISIBLE);
+
+                Location mLocationNow=((HomeActivity)context).mCurrentLocation;
+
+                DriverLocation= new GeoPoint (mLocationNow.getLatitude(),mLocationNow.getLongitude());
+
+                CurrentLocation= new GeoPoint(mLocationNow.getLatitude(),mLocationNow.getLongitude());
 
                 String Status = "Waiting for Payment";
                 Location loc1 = new Location("");
@@ -387,7 +390,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                                         dHistory.get(position).getDriverdp(),
                                         dHistory.get(position).getDrivernic(),
                                         dHistory.get(position).getDriverphone(),
-                                        dHistory.get(position).getDriverlocation(),
+                                        DriverLocation,
                                         dHistory.get(position).getCarregno(),
                                         dHistory.get(position).getDriverid(),
                                         Status,
@@ -418,7 +421,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                                         dHistory.get(position).getDriverdp(),
                                         dHistory.get(position).getDrivernic(),
                                         dHistory.get(position).getDriverphone(),
-                                        dHistory.get(position).getDriverlocation(),
+                                        DriverLocation,
                                         dHistory.get(position).getCarregno(),
                                         dHistory.get(position).getDriverid(),
                                         Status,
@@ -507,6 +510,8 @@ public class ViewHolder extends RecyclerView.ViewHolder{
             /*Date date1 = simpleDateFormat.parse("08:00 AM");
             Date date2 = simpleDateFormat.parse("04:00 PM");
 */
+            Date date =  Calendar.getInstance().getTime();
+            waitDate2=date;
             difference = (waitDate2.getTime() - date.getTime()) / 1000;
             long hours = difference % (24 * 3600) / 3600; // Calculating Hours
             long minute = difference % 3600 / 60; // Calculating minutes if there is any minutes difference

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.icu.text.TimeZoneFormat;
 import android.location.Location;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,10 +28,14 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QuerySnapshot;
 
 
 import java.text.DateFormat;
@@ -41,6 +46,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import static com.google.firebase.firestore.DocumentChange.Type.ADDED;
+import static com.google.firebase.firestore.DocumentChange.Type.MODIFIED;
+import static com.google.firebase.firestore.DocumentChange.Type.REMOVED;
+
 public class customerRequestAdapter extends RecyclerView.Adapter<customerRequestAdapter.ViewHolder> {
 
 
@@ -50,30 +59,34 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
     private String userID;
     //Firebase End
     private String TAG = "";
-    public List<customerRequest>cRequests;
+    public List<customerRequest> cRequests;
     public List<driverAvailable> cDriverInfo;
     public Context context;
-    private Location mCurrentLocation;
+
     private GeoPoint driverLocation;
     private String drivername;
     private String driverdp;
     private String drivernic;
     private String driverphone;
     private String carregno;
-    private Date date =  Calendar.getInstance().getTime();
+    private Date date = Calendar.getInstance().getTime();
     private String uniqueID;
     private float starts;
     private float ridestars;
+    private GeoPoint mPick;
+    private float distance;
+    private GeoPoint mCurrentLocation;
     private String mydate, mytime, gatepass;
-    public customerRequestAdapter(Context context, List<customerRequest>cRequests){
-        this.cRequests= cRequests;
+
+    public customerRequestAdapter(Context context, List<customerRequest> cRequests) {
+        this.cRequests = cRequests;
         this.context = context;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.acceptedrequest_item,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.acceptedrequest_item, parent, false);
         return new ViewHolder(view);
     }
 
@@ -86,29 +99,67 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
 
         userID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
 
-        GeoPoint mPick = cRequests.get(position).getPickup();
-        mCurrentLocation= ((HomeActivity) context).mCurrentLocation;
-        drivername= ((HomeActivity) context).driverName;
-        driverdp= ((HomeActivity) context).driverdp;
-        drivernic= ((HomeActivity) context).drivernic;
-        driverphone= ((HomeActivity) context).driverphone;
-        carregno= ((HomeActivity) context).carregno;
-        driverLocation= new GeoPoint(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude());
 
-        Location loc1 = new Location("");
-        loc1.setLatitude(mCurrentLocation.getLatitude());
-        loc1.setLongitude(mCurrentLocation.getLongitude());
+        /*docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null && document.exists()) {
+                        CurrentLocatiofcn= Objects.requireNonNull(document.toObject(driverAvailable.class)).getDriverLocation();
+                    }
+                }
+            }
 
-        Location loc2 = new Location("");
-        loc2.setLatitude(mPick.getLatitude());
-        loc2.setLongitude(mPick.getLongitude());
 
-       ridestars=0;
-        gatepass=cRequests.get(position).getGatepass();
-       SimpleDateFormat formatter = new SimpleDateFormat("h:mm a", Locale.getDefault());
+        });
+*/
 
-        float distance = loc1.distanceTo(loc2)/1000;
-        mydate =DateFormat.getDateInstance().format(cRequests.get(position).getDate());
+        mPick = cRequests.get(position).getPickup();
+        /* mCurrentLocation= ((HomeActivity) context).;*/
+        drivername = ((HomeActivity) context).driverName;
+        driverdp = ((HomeActivity) context).driverdp;
+        drivernic = ((HomeActivity) context).drivernic;
+        driverphone = ((HomeActivity) context).driverphone;
+        carregno = ((HomeActivity) context).carregno;
+        ridestars = 0;
+        gatepass = cRequests.get(position).getGatepass();
+        SimpleDateFormat formatter = new SimpleDateFormat("h:mm a", Locale.getDefault());
+        final DocumentReference docRef = db.collection("driveravailable").document(userID);
+        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
+                if (snapshot != null && snapshot.exists()) {
+                    Log.d(TAG, "Current data: " + snapshot.getData());
+                    driverAvailable driverAvailable = snapshot.toObject(com.example.raza.total_logix_driver.DTO.driverAvailable.class);
+                    mCurrentLocation = driverAvailable.getDriverLocation();
+
+                    driverLocation=mCurrentLocation;
+
+
+                    Location loc1 = new Location("");
+                    loc1.setLatitude(driverLocation.getLatitude());
+                    loc1.setLongitude(driverLocation.getLongitude());
+
+                    Location loc2 = new Location("");
+                    loc2.setLatitude(mPick.getLatitude());
+                    loc2.setLongitude(mPick.getLongitude());
+
+                    distance = loc1.distanceTo(loc2)/1000;
+
+                } else {
+                    Log.d(TAG, "Current data: null");
+                }
+            }
+        });
+
+
+        mydate = DateFormat.getDateInstance().format(cRequests.get(position).getDate());
         mytime = formatter.format(cRequests.get(position).getDate());
         holder.mName.setText(cRequests.get(position).getName());
         holder.mPickup.setText(cRequests.get(position).getPickupaddress());
@@ -122,9 +173,13 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
         holder.mBoxes.setText(cRequests.get(position).getBoxes());
         holder.mRatingBar.setRating(cRequests.get(position).getStars());
         final String user_id = cRequests.get(position).userId;
-        holder.mDistance.setText(String.valueOf(distance)+"KM");
+        holder.mDistance.setText(String.valueOf(distance) + "KM");
         uniqueID = cRequests.get(position).getUniqueID();
-                holder.mSkip.setOnClickListener(new View.OnClickListener() {
+
+
+
+
+        holder.mSkip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cRequests.remove(position);
@@ -137,7 +192,8 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
         holder.mAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context,"Accept Button",Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Accept Button", Toast.LENGTH_SHORT).show();
+
 
                 DocumentReference docRef = db.collection("customerRequest").document(cRequests.get(position).userId);
                 docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -147,8 +203,8 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
                             DocumentSnapshot document = task.getResult();
                             if (document != null && document.exists()) {
 
-                                driverHistory driverHistory = new driverHistory(cRequests.get(position).getName(), cRequests.get(position).getPickup(), cRequests.get(position).getDrop(),null,null, cRequests.get(position).getPhone(), cRequests.get(position).getDate(), cRequests.get(position).getCID(), cRequests.get(position).getVT(), cRequests.get(position).getWeight(), cRequests.get(position).getBoxes(), cRequests.get(position).getDescription(), cRequests.get(position).getDriverloading(), cRequests.get(position).getRidedistance(), cRequests.get(position).getPickupaddress(), cRequests.get(position).getDropaddress(),cRequests.get(position).getEstFare(), drivername, driverdp, drivernic, driverphone, driverLocation, carregno, userID, "Pending",null, null,null,0,uniqueID,"Pending",ridestars,cRequests.get(position).getRidedistance(),gatepass);
-                                acceptRequest acceptRequest = new acceptRequest(cRequests.get(position).getName(), cRequests.get(position).getPickup(), cRequests.get(position).getDrop(),null,null, cRequests.get(position).getPhone(), cRequests.get(position).getDate(), cRequests.get(position).getCID(), cRequests.get(position).getVT(), cRequests.get(position).getWeight(), cRequests.get(position).getBoxes(), cRequests.get(position).getDescription(), cRequests.get(position).getDriverloading(), cRequests.get(position).getRidedistance(), cRequests.get(position).getPickupaddress(), cRequests.get(position).getDropaddress(),cRequests.get(position).getEstFare(), drivername, driverdp, drivernic, driverphone, driverLocation, carregno, userID,"Pending",null, null,null,date,0,uniqueID,"Pending",ridestars,cRequests.get(position).getRidedistance(),gatepass);
+                                driverHistory driverHistory = new driverHistory(cRequests.get(position).getName(), cRequests.get(position).getPickup(), cRequests.get(position).getDrop(), null, null, cRequests.get(position).getPhone(), cRequests.get(position).getDate(), cRequests.get(position).getCID(), cRequests.get(position).getVT(), cRequests.get(position).getWeight(), cRequests.get(position).getBoxes(), cRequests.get(position).getDescription(), cRequests.get(position).getDriverloading(), cRequests.get(position).getRidedistance(), cRequests.get(position).getPickupaddress(), cRequests.get(position).getDropaddress(), cRequests.get(position).getEstFare(), drivername, driverdp, drivernic, driverphone, driverLocation, carregno, userID, "Pending", null, null, null, 0, uniqueID, "Pending", ridestars, cRequests.get(position).getRidedistance(), gatepass);
+                                acceptRequest acceptRequest = new acceptRequest(cRequests.get(position).getName(), cRequests.get(position).getPickup(), cRequests.get(position).getDrop(), null, null, cRequests.get(position).getPhone(), cRequests.get(position).getDate(), cRequests.get(position).getCID(), cRequests.get(position).getVT(), cRequests.get(position).getWeight(), cRequests.get(position).getBoxes(), cRequests.get(position).getDescription(), cRequests.get(position).getDriverloading(), cRequests.get(position).getRidedistance(), cRequests.get(position).getPickupaddress(), cRequests.get(position).getDropaddress(), cRequests.get(position).getEstFare(), drivername, driverdp, drivernic, driverphone, driverLocation, carregno, userID, "Pending", null, null, null, date, 0, uniqueID, "Pending", ridestars, cRequests.get(position).getRidedistance(), gatepass);
                                 db.collection("acceptRequest").document(uniqueID).set(acceptRequest);
                                 db.collection("CustomerHistory").document(uniqueID).set(driverHistory);
                                 db.collection("DriverHistory").document(uniqueID).set(driverHistory);
@@ -158,7 +214,7 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
                                             public void onSuccess(Void aVoid) {
                                                 Log.d(TAG, "DocumentSnapshot successfully deleted!");
                                                 Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                                                Intent intent = new Intent(context,Current_Ride_Activity.class);
+                                                Intent intent = new Intent(context, Current_Ride_Activity.class);
                                                 context.startActivity(intent);
                                             }
 
@@ -170,16 +226,14 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
                                             }
                                         });
                             } else {
-                                Toast.makeText(context,"Ride Already Booked",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, "Ride Already Booked", Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                                Log.d(TAG, "get failed with ", task.getException());
+                            Log.d(TAG, "get failed with ", task.getException());
                         }
 
                     }
                 });
-
-
 
 
             }
@@ -187,7 +241,7 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               Toast.makeText(context,"User ID = " + user_id,Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "User ID = " + user_id, Toast.LENGTH_SHORT).show();
 
 
             }
@@ -199,34 +253,32 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
         return cRequests.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         View mView;
-        public TextView mName,mPickup,mDrop,mPhone, mDistance,  mRideDistance,mDate,mTime, mDiscription,mWeight,mBoxes;
+        public TextView mName, mPickup, mDrop, mPhone, mDistance, mRideDistance, mDate, mTime, mDiscription, mWeight, mBoxes;
         public Button mAccept, mSkip;
         public RatingBar mRatingBar;
         public RatingBar mRideRating;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mView= itemView;
-            mName=(TextView)mView.findViewById(R.id.txt_customername);
-            mPickup=(TextView)mView.findViewById(R.id.txt_from_add);
-            mDrop=(TextView)mView.findViewById(R.id.txt_to_add);
-            mPhone=(TextView)mView.findViewById(R.id.txt_phone);
-            mAccept=(Button)mView.findViewById(R.id.acceptbtn);
-            mSkip=(Button)mView.findViewById(R.id.declinebtn);
-            mDistance=(TextView)mView.findViewById(R.id.distancefrom);
-            mRideDistance=(TextView)mView.findViewById(R.id.txt_est_distance);
-            mDate=(TextView)mView.findViewById(R.id.date);
-            mTime=(TextView)mView.findViewById(R.id.time);
-            mDiscription=(TextView)mView.findViewById(R.id.description);
-            mBoxes=(TextView)mView.findViewById(R.id.Boxes);
-            mWeight=(TextView)mView.findViewById(R.id.weight);
-            mRatingBar=(RatingBar)mView.findViewById(R.id.c_rating);
+            mView = itemView;
+            mName = (TextView) mView.findViewById(R.id.txt_customername);
+            mPickup = (TextView) mView.findViewById(R.id.txt_from_add);
+            mDrop = (TextView) mView.findViewById(R.id.txt_to_add);
+            mPhone = (TextView) mView.findViewById(R.id.txt_phone);
+            mAccept = (Button) mView.findViewById(R.id.acceptbtn);
+            mSkip = (Button) mView.findViewById(R.id.declinebtn);
+            mDistance = (TextView) mView.findViewById(R.id.distancefrom);
+            mRideDistance = (TextView) mView.findViewById(R.id.txt_est_distance);
+            mDate = (TextView) mView.findViewById(R.id.date);
+            mTime = (TextView) mView.findViewById(R.id.time);
+            mDiscription = (TextView) mView.findViewById(R.id.description);
+            mBoxes = (TextView) mView.findViewById(R.id.Boxes);
+            mWeight = (TextView) mView.findViewById(R.id.weight);
+            mRatingBar = (RatingBar) mView.findViewById(R.id.c_rating);
 
         }
     }
-
-
 }
