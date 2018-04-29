@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:paddingTop="5dp"
+
+        android:layout_gravity="center"
+        >
+
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:id="@+id/mapview"
+            android:src="@drawable/ic_launcher"
+            android:foregroundGravity="center"
+            />
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/scrollviewrequest"
+            android:layout_below="@id/mapview"
+            >
+
+            <LinearLayout
+                android:background="@color/white"
+                android:id="@+id/linear_child1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_below="@+id/scrollviewrequest"
+                android:orientation="vertical">
+
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_20"
+                    >
+
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0dp"
+                        android:padding="10dp"
+                        android:gravity="center">
+
+                        <TextView
+                            android:text="Total Fare"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingEnd="@dimen/margin_20"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                            />
+
+                        <TextView
+                           android:id="@+id/totalfarepayment"
+                            android:hint="@string/sample_fare"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                            />
+                      </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0dp"
+                        android:padding="10dp"
+                        android:gravity="center">
+
+                        <TextView
+                            android:text="Wallet Balance"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingEnd="@dimen/margin_20"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                            />
+
+                        <TextView
+                            android:id="@+id/walletbalancepayment"
+                            android:hint="@string/sample_fare"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                            />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0dp"
+                        android:padding="10dp"
+                        android:gravity="center">
+
+                        <TextView
+                            android:text="Remaining Due"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingEnd="@dimen/margin_20"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                            />
+
+                        <TextView
+                            android:id="@+id/remainingpayment"
+                            android:hint="@string/sample_fare"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                            />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0dp"
+                        android:padding="10dp"
+                        android:gravity="center">
+
+                        <TextView
+                            android:text="Add to Wallet"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingEnd="@dimen/margin_20"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                            />
+
+                        <EditText
+                            android:id="@+id/addtowalletEditPayment"
+                            android:hint="@string/sample_fare"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                            />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0dp"
+                        android:padding="10dp"
+                        android:gravity="center">
+
+                        <android.support.v7.widget.AppCompatButton
+                            android:id="@+id/btn_pay"
+                            android:layout_width="@dimen/login_width"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="@dimen/margin_20"
+                            android:layout_marginTop="@dimen/margin_10"
+                            android:background="@drawable/ripple_effect"
+                            android:text="Pay"
+                            android:textColor="@color/black" />
+
+                    </TableRow>
+
+
+                </TableLayout>
+
+
+            </LinearLayout>
+        </ScrollView>
+
+
+
+    </RelativeLayout>
+
+
+</FrameLayout>

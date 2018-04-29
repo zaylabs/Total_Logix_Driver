@@ -14,6 +14,8 @@ import com.example.raza.total_logix_driver.DTO.driverHistory;
 import com.example.raza.total_logix_driver.R;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -28,7 +30,7 @@ public class driverHistoryAdapter extends RecyclerView.Adapter<driverHistoryAdap
     private Date date;
     private float ridestars;
     private String gatepass;
-
+    private NumberFormat RsFormat = new DecimalFormat("'Rs.'#");
     public driverHistoryAdapter(Context context, List<driverHistory> dHistory){
 
         this.context = context;
@@ -65,7 +67,7 @@ public class driverHistoryAdapter extends RecyclerView.Adapter<driverHistoryAdap
         holder.mWeight.setText(dHistory.get(position).getWeight());
         holder.mPaymentStatus.setText(dHistory.get(position).getSettlement());
         holder.mPaidVia.setText(dHistory.get(position).getPaidvia());
-        holder.mfare.setText(dHistory.get(position).getRidefare());
+        holder.mfare.setText(RsFormat.format(dHistory.get(position).getRidefare()));
         holder.mRideRating.setRating(dHistory.get(position).getRidestars());
         holder.mdate.setText(mydate);
         holder.mtime.setText(mytime);

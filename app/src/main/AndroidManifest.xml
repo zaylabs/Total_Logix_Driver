@@ -48,7 +48,8 @@
         <activity
             android:name=".activities.MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".activities.Current_Ride_Activity"></activity>
+        <activity android:name=".activities.Current_Ride_Activity" />
+        <activity android:name=".activities.paymentActivity"></activity>
     </application>
 
 </manifest>

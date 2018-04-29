@@ -1,5 +1,6 @@
 package com.example.raza.total_logix_driver.recylerViewAdapters;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -16,11 +17,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.raza.total_logix_driver.DTO.acceptRequest;
+import com.example.raza.total_logix_driver.DTO.currentCash;
 import com.example.raza.total_logix_driver.DTO.driverAvailable;
 import com.example.raza.total_logix_driver.DTO.driverHistory;
+import com.example.raza.total_logix_driver.DTO.wallet;
 import com.example.raza.total_logix_driver.R;
 import com.example.raza.total_logix_driver.activities.Current_Ride_Activity;
 import com.example.raza.total_logix_driver.activities.HomeActivity;
+import com.example.raza.total_logix_driver.suportclasses.dialogbox;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -75,6 +79,16 @@ private int SuzukiBase;
 private int RikshaBase;
 private int DriverLoadingRate;
 private String StringDateTime;
+private NumberFormat RsFormat = new DecimalFormat("'Rs.'#");
+private float totalfarepaymentfloat;
+private float walletpaymentfloat;
+private float remainingbalancefloat;
+private float oldcurrentcashfloat;
+private float oldtotalfarepending;
+private float totallogixsharepercent;
+private float oldtotaljourney;
+private float oldDrivershare;
+private float oldtotallogixshare;
 
     public currentRideAdapter(Context context, List<acceptRequest> dHistory){
 
@@ -113,7 +127,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
     SuzukiBase=600;
     RikshaBase=270;
     DriverLoadingRate=150;
-
+    totallogixsharepercent=20;
 
 
 
@@ -138,9 +152,12 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
         holder.mWeight.setText(dHistory.get(position).getWeight());
         holder.mWaiting.setText(numberFormat.format(dHistory.get(position).getWaitingtime()));
         holder.mPaidVia.setText(dHistory.get(position).getPaidvia());
-        holder.mfare.setText(dHistory.get(position).getRidefare());
+        holder.mfare.setText(RsFormat.format(dHistory.get(position).getRidefare()));
         holder.mEstRideDistance.setText(distanceFormat.format(dHistory.get(position).getEstDistance()));
         holder.mDatetime.setText(dateFormat.format(dHistory.get(position).getDate()));
+
+        final Dialog myDialog = new Dialog(context);
+        myDialog.setContentView(R.layout.additional_detail_dialog);
 
 
         holder.mReached.setOnClickListener(new View.OnClickListener() {
@@ -185,7 +202,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                         dHistory.get(position).getCarregno(),
                         dHistory.get(position).getDriverid(),
                         Status,
-                        null,
+                        0,
                         null,
                         null,
                         0,
@@ -216,7 +233,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                         dHistory.get(position).getCarregno(),
                         dHistory.get(position).getDriverid(),
                         Status,
-                        null,
+                        0,
                         null,
                         null,
                         date,
@@ -276,7 +293,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                         dHistory.get(position).getCarregno(),
                         dHistory.get(position).getDriverid(),
                         Status,
-                        null,
+                        0,
                         null,
                         null,
                         waiting,
@@ -307,7 +324,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                         dHistory.get(position).getCarregno(),
                         dHistory.get(position).getDriverid(),
                         Status,
-                        null,
+                        0,
                         null,
                         null,
                         dHistory.get(position).getStatusdate(),
@@ -364,9 +381,8 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                         result = b;
                     }
                 }
-                NumberFormat numberFormat = new DecimalFormat("'Rs.'#");
 
-                final String results = (numberFormat.format(result));
+                final float results = result;
 
                                 driverHistory driverHistory = new driverHistory(
                                         dHistory.get(position).getName(),
@@ -444,7 +460,158 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
         holder.mPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db.collection("acceptRequest").document(dHistory.get(position).getUniqueID()).delete()
+
+                totalfarepaymentfloat = dHistory.get(position).getRidefare();
+
+                TextView mTotalFare=(TextView)myDialog.findViewById(R.id.totalfarepayment);
+                final TextView mWalletBalance=(TextView)myDialog.findViewById(R.id.walletbalancepayment);
+                TextView mReaminingBalance=(TextView)myDialog.findViewById(R.id.remainingpayment);
+                final EditText mAddAmount=(EditText)myDialog.findViewById(R.id.addtowalletEditPayment);
+                Button mPay=(Button)myDialog.findViewById(R.id.pay_button);
+
+                mTotalFare.setText(RsFormat.format(totalfarepaymentfloat));
+                db.collection("wallet").document(dHistory.get(position).getCID()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                                wallet wallet = documentSnapshot.toObject(wallet.class);
+                                walletpaymentfloat=wallet.getAmount();
+                                mWalletBalance.setText(RsFormat.format(walletpaymentfloat));
+
+                    }
+                });
+
+                remainingbalancefloat=totalfarepaymentfloat-walletpaymentfloat;
+                mReaminingBalance.setText(RsFormat.format(remainingbalancefloat));
+
+
+                mPay.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        String Status = "Completed";
+                        String PaymentStatus="Paid";
+                        String PaidVia= "Driver";
+                        driverHistory driverHistory = new driverHistory(
+                                dHistory.get(position).getName(),
+                                dHistory.get(position).getOriginalpickup(),
+                                dHistory.get(position).getOriginaldrop(),
+                                dHistory.get(position).getActualpickup(),
+                                dHistory.get(position).getActualdrop(),
+                                dHistory.get(position).getPhone(),
+                                dHistory.get(position).getDate(),
+                                dHistory.get(position).getCID(),
+                                dHistory.get(position).getVT(),
+                                dHistory.get(position).getWeight(),
+                                dHistory.get(position).getBoxes(),
+                                dHistory.get(position).getDescription(),
+                                dHistory.get(position).getDriverloading(),
+                                dHistory.get(position).getRidedistance(),
+                                dHistory.get(position).getPickupaddress(),
+                                dHistory.get(position).getDropaddress(),
+                                dHistory.get(position).getEstFare(),
+                                dHistory.get(position).getDrivername(),
+                                dHistory.get(position).getDriverdp(),
+                                dHistory.get(position).getDrivernic(),
+                                dHistory.get(position).getDriverphone(),
+                                DriverLocation,
+                                dHistory.get(position).getCarregno(),
+                                dHistory.get(position).getDriverid(),
+                                Status,
+                                dHistory.get(position).getRidefare(),
+                                PaidVia,
+                                PaymentStatus,
+                                dHistory.get(position).getWaitingtime(),
+                                dHistory.get(position).getUniqueID(),dHistory.get(position).getSettlement(),dHistory.get(position).getRidestars(),dHistory.get(position).getEstDistance(),dHistory.get(position).getGatepass());
+                        acceptRequest acceptRequest = new acceptRequest(
+                                dHistory.get(position).getName(),
+                                dHistory.get(position).getOriginalpickup(),
+                                dHistory.get(position).getOriginaldrop(),
+                                dHistory.get(position).getActualpickup(),
+                                dHistory.get(position).getActualdrop(),
+                                dHistory.get(position).getPhone(),
+                                dHistory.get(position).getDate(),
+                                dHistory.get(position).getCID(),
+                                dHistory.get(position).getVT(),
+                                dHistory.get(position).getWeight(),
+                                dHistory.get(position).getBoxes(),
+                                dHistory.get(position).getDescription(),
+                                dHistory.get(position).getDriverloading(),
+                                dHistory.get(position).getRidedistance(),
+                                dHistory.get(position).getPickupaddress(),
+                                dHistory.get(position).getDropaddress(),
+                                dHistory.get(position).getEstFare(),
+                                dHistory.get(position).getDrivername(),
+                                dHistory.get(position).getDriverdp(),
+                                dHistory.get(position).getDrivernic(),
+                                dHistory.get(position).getDriverphone(),
+                                DriverLocation,
+                                dHistory.get(position).getCarregno(),
+                                dHistory.get(position).getDriverid(),
+                                Status,
+                                dHistory.get(position).getRidefare(),
+                                PaidVia,
+                                PaymentStatus,
+                                dHistory.get(position).getStatusdate(),
+                                dHistory.get(position).getWaitingtime(),
+                                dHistory.get(position).getUniqueID(),dHistory.get(position).getSettlement(),dHistory.get(position).getRidestars(),dHistory.get(position).getEstDistance(),dHistory.get(position).getGatepass()
+                        );
+
+                        float newcurrentcash= Float.valueOf(mAddAmount.getText().toString());
+
+                        db.collection("currentCash").document(userID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                            @Override
+                            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                                currentCash currentCash = documentSnapshot.toObject(currentCash.class);
+                                oldcurrentcashfloat=currentCash.getCurrentcash();
+                                oldtotalfarepending=currentCash.getTotalfarepending();
+                                oldtotaljourney=currentCash.getTotaljourney();
+                                oldDrivershare=currentCash.getTotaldriversharepending();
+                                oldtotalfarepending=currentCash.getTotlalogixsharepending();
+
+                            }
+                        });
+                        float currentcash = oldcurrentcashfloat+newcurrentcash;
+                        float totalfarepending= oldtotalfarepending+dHistory.get(position).getRidefare();
+                        float newtotallogixshare=  dHistory.get(position).getRidefare()*totallogixsharepercent;
+                        float totallogixshare=oldtotalfarepending+newtotallogixshare;
+                        float newdrivershare= oldtotalfarepending+dHistory.get(position).getRidefare()-totallogixshare;
+                        float drivershare=oldDrivershare+newdrivershare;
+                        float totaljourney= oldtotaljourney+1;
+                        Date nowdate =  Calendar.getInstance().getTime();
+                        currentCash currentCash= new currentCash (currentcash, totalfarepending, drivershare, totallogixshare, totaljourney, nowdate);
+
+
+
+
+                        db.collection("acceptRequest").document(dHistory.get(position).getUniqueID()).set(acceptRequest);
+                        db.collection("CustomerHistory").document(dHistory.get(position).getUniqueID()).set(driverHistory);
+                        db.collection("DriverHistory").document(dHistory.get(position).getUniqueID()).set(driverHistory);
+
+
+                        db.collection("acceptRequest").document(dHistory.get(position).getUniqueID()).delete()
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                                        Intent intent = new Intent(context, HomeActivity.class);
+                                        context.startActivity(intent);
+                                    }
+
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error deleting document", e);
+                                    }
+                                });
+
+
+                    }
+                });
+
+
+                /* db.collection("acceptRequest").document(dHistory.get(position).getUniqueID()).delete()
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
@@ -460,7 +627,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                             public void onFailure(@NonNull Exception e) {
                                 Log.w(TAG, "Error deleting document", e);
                             }
-                        });
+                        });*/
 
             }
         });

@@ -32,7 +32,7 @@ public class driverHistory {
     private String carregno;
     private String driverid;
     private String status;
-    private String ridefare;
+    private float ridefare;
     private String paidvia;
     private String paymentstatus;
     private float waitingtime;
@@ -45,7 +45,7 @@ public class driverHistory {
 
         }
 
-        public driverHistory (String name, GeoPoint originalpickup, GeoPoint originaldrop, GeoPoint actualpickup, GeoPoint actualdrop, String phone, Date date, String CID, String VT, String weight, String boxes , String description, String driverloading, float ridedistance, String pickupaddress, String dropaddress, String estFare, String drivername, String driverdp, String drivernic, String driverphone, GeoPoint driverlocation, String carregno, String driverid, String status, String ridefare, String paidvia, String paymentstatus, float waitingtime, String uniqueID, String settlement, float ridestars, float estDistance, String gatepass){
+        public driverHistory (String name, GeoPoint originalpickup, GeoPoint originaldrop, GeoPoint actualpickup, GeoPoint actualdrop, String phone, Date date, String CID, String VT, String weight, String boxes , String description, String driverloading, float ridedistance, String pickupaddress, String dropaddress, String estFare, String drivername, String driverdp, String drivernic, String driverphone, GeoPoint driverlocation, String carregno, String driverid, String status, float ridefare, String paidvia, String paymentstatus, float waitingtime, String uniqueID, String settlement, float ridestars, float estDistance, String gatepass){
 
             this.name = name;
             this.originalpickup = originalpickup;
@@ -252,11 +252,11 @@ public class driverHistory {
         this.driverid = driverid;
     }
 
-    public String getRidefare() {
+    public float getRidefare() {
         return ridefare;
     }
 
-    public void setRidefare(String ridefare) {
+    public void setRidefare(float ridefare) {
         this.ridefare = ridefare;
     }
 
