@@ -127,6 +127,16 @@
     <string name="customer_rating">Customer Rating</string>
     <string name="rating">Rating</string>
     <string name="zero">0</string>
+    <string name="old_balance">Old Balance</string>
+    <string name="updated_balance">Updated Balance</string>
+    <string name="new_balance">New Balance</string>
+    <string name="transaction_history">Transaction History</string>
+    <string name="total_rides">Total Rides</string>
+    <string name="cash">Cash</string>
+    <string name="earned">Earned</string>
+    <string name="total_logix">Total Logix</string>
+    <string name="logo">Logo</string>
+    <string name="total_earning">Total Earning</string>
 
 
 </resources>

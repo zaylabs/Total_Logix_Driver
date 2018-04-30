@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -38,12 +39,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.raza.total_logix_driver.BuildConfig;
+import com.example.raza.total_logix_driver.DTO.currentCash;
 import com.example.raza.total_logix_driver.DTO.customerRequest;
 import com.example.raza.total_logix_driver.DTO.driverAvailable;
 import com.example.raza.total_logix_driver.DTO.driverProfile;
 import com.example.raza.total_logix_driver.R;
 import com.example.raza.total_logix_driver.fragment.DriverHistoryFragment;
 import com.example.raza.total_logix_driver.fragment.profileFragment;
+import com.example.raza.total_logix_driver.fragment.transactionhistoryFragment;
 import com.example.raza.total_logix_driver.recylerViewAdapters.customerRequestAdapter;
 import com.example.raza.total_logix_driver.suportclasses.PermissionUtils;
 import com.google.android.gms.common.api.ApiException;
@@ -82,6 +85,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -225,6 +230,11 @@ public class HomeActivity extends BaseActivity
     private customerRequest request;
     private String user_id;
     private String TAG = "";
+    private TextView mCash,mLogix,mEarned;
+    private String Cash;
+    private String Logix;
+    private String Earned;
+    private NumberFormat RsFormat = new DecimalFormat("'Rs.'#");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -256,6 +266,10 @@ public class HomeActivity extends BaseActivity
         };
 
         mFooter=findViewById(R.id.footer);
+        mCash=findViewById(R.id.txt_cash);
+        mLogix=findViewById(R.id.txt_totallogix);
+        mEarned=findViewById(R.id.txt_earned);
+
         mJobList=findViewById(R.id.joblistframe);
         cRequests = new ArrayList<>();
         customerRequestAdapter = new customerRequestAdapter(this, cRequests);
@@ -264,6 +278,17 @@ public class HomeActivity extends BaseActivity
 
         mListview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         mListview.setAdapter(customerRequestAdapter);
+
+        firestoreDB.collection("currentCash").document(user_id).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                currentCash currentCash = documentSnapshot.toObject(com.example.raza.total_logix_driver.DTO.currentCash.class);
+                mCash.setText(RsFormat.format(currentCash.getCurrentcash()));
+                mLogix.setText(String.valueOf(currentCash.getTotaljourney()));
+                mEarned.setText(RsFormat.format(currentCash.getTotaldriversharepending()));
+            }
+        });
+
 
 // *********************Location Update ************************************
 
@@ -524,8 +549,10 @@ public class HomeActivity extends BaseActivity
                 ft.replace(R.id.cm, new DriverHistoryFragment());
                 ft.commit();
                 break;
-            case R.id.cancelled:
-
+            case R.id.transactionhistory:
+                hideFooter();
+                ft.replace(R.id.cm, new transactionhistoryFragment());
+                ft.commit();
                 break;
             case R.id.payment_detail:
 

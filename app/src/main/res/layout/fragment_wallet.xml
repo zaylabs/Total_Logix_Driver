@@ -3,234 +3,213 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragment.wallet"
-    >
+    tools:context=".fragment.walletFragment">
+
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        android:paddingTop="5dp"
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical"
+            >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:id="@+id/logolinier"
         >
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:contentDescription="@string/logo"
+        android:id="@+id/logo"
+        android:src="@mipmap/splash"
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="80dp"
-            android:layout_centerHorizontal="true"
-            android:id="@+id/mapview"
-            android:src="@mipmap/splash"
-            />
+               />
+    </LinearLayout>
+        <TableLayout
+            android:id="@+id/unsettled_table"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp"
+        android:paddingTop="@dimen/margin_20"
+            android:visibility="visible"
+            android:layout_below="@+id/logolinier"
+            >
+       <TableRow>
 
-
-        <ScrollView
+        <TextView
+            android:id="@+id/label_cashinhand"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/scrollviewrequest"
-            android:layout_below="@id/mapview"
+            android:text="Cash In Hand"
+            android:padding="@dimen/margin_5"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            />
+        <TextView
+            android:id="@+id/wallet_cashinhand"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Rs.0000"
+            android:padding="@dimen/margin_5"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            />
+       </TableRow>
+
+       <TableRow>
+        <TextView
+            android:id="@+id/label_unsettledfare"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Unsettled Fare"
+            android:padding="@dimen/margin_5"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            />
+        <TextView
+            android:id="@+id/wallet_farepending"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Rs.0000"
+            android:padding="@dimen/margin_5"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            />
+       </TableRow>
+       <TableRow>
+        <TextView
+            android:id="@+id/label_unsettleddriversahre"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Unsettled Earning"
+            android:padding="@dimen/margin_5"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            />
+        <TextView
+            android:id="@+id/wallet_driversharepending"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Rs.0000"
+            android:padding="@dimen/margin_5"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            />
+       </TableRow>
+
+            <TableRow>
+        <TextView
+            android:id="@+id/label_unsettledlogixshare"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Unsettled TL Share"
+            android:padding="@dimen/margin_5"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            />
+        <TextView
+            android:id="@+id/wallet_logixsharepending"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Rs.0000"
+            android:padding="@dimen/margin_5"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            />
+            </TableRow>
+            <TableRow>
+        <TextView
+            android:id="@+id/label_unsettledlogix"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Unsettled Logix"
+            android:padding="@dimen/margin_5"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            />
+
+        <TextView
+            android:id="@+id/wallet_logixpending"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:text="0000"
+            android:padding="@dimen/margin_5"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            />
+            </TableRow>
+        </TableLayout>
+
+        <TableLayout
+            android:id="@+id/totalearningtable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp"
+            android:paddingTop="@dimen/margin_20"
+            android:visibility="gone"
+            android:layout_below="@+id/logolinier"
             >
 
-            <LinearLayout
-                android:background="@color/white"
-                android:id="@+id/linear_child1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/scrollviewrequest"
-                android:orientation="vertical">
+            <TableRow>
+        <TextView
+            android:id="@+id/label_driverearningtodate"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Total Earning"
+            android:padding="@dimen/margin_5"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            />
+        <TextView
+            android:id="@+id/wallet_overallearning"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Rs.0000"
+            android:padding="@dimen/margin_5"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            />
+            </TableRow>
+            <TableRow>
+        <TextView
+            android:id="@+id/label_totallogix"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Total Logix Rides"
+            android:padding="@dimen/margin_5"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            />
+        <TextView
+            android:id="@+id/wallet_overalllogixride"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="0000"
+            android:layout_gravity="center"
+            android:padding="@dimen/margin_5"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            />
+            </TableRow>
 
-                <TableLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_20"
-                    >
+        </TableLayout>
 
-
-                    <TableRow
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="0dp"
-                        android:padding="10dp"
-                        android:gravity="center">
-
-                        <TextView
-                            android:id="@+id/textView8"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/current_balance"
-                            android:padding="@dimen/margin_20"
-                            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                        <TextView
-                            android:id="@+id/currentBalaceTV"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/hint_amount"
-                            android:padding="@dimen/margin_20"
-                            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                    </TableRow>
-
-                    <TableRow
-                        android:id="@+id/amountrow"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="0dp"
-                        android:padding="10dp"
-                        android:gravity="center"
-                        android:visibility="gone"
-                        >
-
-                        <TextView
-                            android:id="@+id/textView9"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/enter_amount"
-                            android:padding="@dimen/margin_20"
-                            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                        <EditText
-                            android:id="@+id/AmountET"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/hint_amount"
-                            android:padding="@dimen/margin_20"
-                            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                    </TableRow>
-                    <TableRow
-                        android:id="@+id/cashvrow"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="0dp"
-                        android:padding="10dp"
-                        android:gravity="center"
-                        android:visibility="gone"
-                        >
-
-                        <TextView
-                            android:id="@+id/textView10"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/enter_cash_voucher"
-                            android:padding="@dimen/margin_20"
-                            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                        <EditText
-                            android:id="@+id/cashvoucherET"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/cashvoucherexample"
-                            android:padding="@dimen/margin_20"
-                            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                    </TableRow>
-
-
-                </TableLayout>
-
-
-
-
-
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/addBalaceCV"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_5"
-                    app:cardBackgroundColor="@color/text_color"
-                    app:cardCornerRadius="5dp"
-                    app:cardUseCompatPadding="true"
-                    android:visibility="visible"
-                    >
-
-
-                    <android.support.v7.widget.AppCompatButton
-                        android:id="@+id/addBalace"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/text_color"
-                        android:padding="@dimen/margin_15"
-                        android:text="@string/add_balance"
-
-                        android:textStyle="normal" />
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/addviaccCV"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_5"
-                    app:cardBackgroundColor="@color/text_color"
-                    app:cardCornerRadius="5dp"
-                    app:cardUseCompatPadding="true"
-                    android:visibility="gone"
-                    >
-
-
-                    <android.support.v7.widget.AppCompatButton
-                        android:id="@+id/addviacc"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/text_color"
-                        android:padding="@dimen/margin_15"
-                        android:text="@string/pay_via_credit_card"
-
-                        android:textStyle="normal" />
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/addviacashvoucherCV"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_5"
-                    app:cardBackgroundColor="@color/text_color"
-                    app:cardCornerRadius="5dp"
-                    app:cardUseCompatPadding="true"
-                    android:visibility="gone"
-                    >
-
-
-                    <android.support.v7.widget.AppCompatButton
-                        android:id="@+id/addviacashvoucher"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/text_color"
-                        android:padding="@dimen/margin_15"
-                        android:text="@string/cashVoucher"
-
-                        android:textStyle="normal" />
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/applyCashVoucherCV"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_5"
-                    app:cardBackgroundColor="@color/text_color"
-                    app:cardCornerRadius="5dp"
-                    app:cardUseCompatPadding="true"
-                    android:visibility="gone"
-                    >
-
-
-                    <android.support.v7.widget.AppCompatButton
-                        android:id="@+id/applyCashVoucher"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/text_color"
-                        android:padding="@dimen/margin_15"
-                        android:text="@string/apply_cash_voucher"
-
-                        android:textStyle="normal" />
-                </android.support.v7.widget.CardView>
-
-
-            </LinearLayout>
-        </ScrollView>
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_totalearning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/text_color"
+            android:padding="@dimen/margin_15"
+            android:text="@string/total_earning"
+            android:layout_below="@id/unsettled_table"
+            android:textStyle="normal"
+            android:visibility="visible"
+            />
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_unsettled"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/text_color"
+            android:padding="@dimen/margin_15"
+            android:text="Unsettled Stats"
+            android:layout_below="@+id/unsettled_table"
+            android:textStyle="normal"
+            android:visibility="gone"
+            />
 
 
 
     </RelativeLayout>
-
 
 </FrameLayout>

@@ -86,16 +86,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/today"
+                        android:text="@string/cash"
                         android:textSize="@dimen/margin_20" />
 
                     <TextView
-                        android:id="@+id/txt_todayearning"
+                        android:id="@+id/txt_cash"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/five"
-                        android:text="@string/todayearning"
+                        android:text="0000"
                         android:textSize="@dimen/margin_20" />
 
                 </LinearLayout>
@@ -109,16 +109,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/this_week"
+                        android:text="@string/total_logix"
                         android:textSize="@dimen/margin_20" />
 
                     <TextView
-                        android:id="@+id/txt_weekearning"
+                        android:id="@+id/txt_totallogix"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/five"
-                        android:text="@string/weekearning"
+                        android:text="0000"
                         android:textSize="@dimen/margin_20" />
 
                 </LinearLayout>
@@ -133,16 +133,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/overall"
+                        android:text="@string/earned"
                         android:textSize="@dimen/margin_20" />
 
                     <TextView
-                        android:id="@+id/txt_overallearning"
+                        android:id="@+id/txt_earned"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/five"
-                        android:text="@string/overallearning"
+                        android:text="0000"
                         android:textSize="@dimen/margin_20" />
 
                 </LinearLayout>
