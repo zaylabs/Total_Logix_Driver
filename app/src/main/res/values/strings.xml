@@ -126,6 +126,7 @@
     <string name="phone_call_content_description">phone call</string>
     <string name="customer_rating">Customer Rating</string>
     <string name="rating">Rating</string>
+    <string name="zero">0</string>
 
 
 </resources>

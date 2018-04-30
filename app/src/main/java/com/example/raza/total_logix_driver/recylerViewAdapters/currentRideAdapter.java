@@ -16,10 +16,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.raza.total_logix_driver.DTO.DriverTransactionHistory;
+import com.example.raza.total_logix_driver.DTO.Userid;
 import com.example.raza.total_logix_driver.DTO.acceptRequest;
 import com.example.raza.total_logix_driver.DTO.currentCash;
 import com.example.raza.total_logix_driver.DTO.driverAvailable;
 import com.example.raza.total_logix_driver.DTO.driverHistory;
+import com.example.raza.total_logix_driver.DTO.overallcash;
+import com.example.raza.total_logix_driver.DTO.settings;
+import com.example.raza.total_logix_driver.DTO.totalearning;
+import com.example.raza.total_logix_driver.DTO.transactionhistory;
 import com.example.raza.total_logix_driver.DTO.wallet;
 import com.example.raza.total_logix_driver.R;
 import com.example.raza.total_logix_driver.activities.Current_Ride_Activity;
@@ -89,6 +95,22 @@ private float totallogixsharepercent;
 private float oldtotaljourney;
 private float oldDrivershare;
 private float oldtotallogixshare;
+private float completetotalearning;
+private float completetotallogixshare;
+private float completetotalride;
+
+private float occashold;
+private float ocfareold;;
+private float oclogixshareold;
+private float ocdrivershareold;
+private float octotaljourneyold;
+
+private float occash;
+private float ocfare;;
+private float oclogixshare;
+private float ocdrivershare;
+private float octotaljourney;
+private Dialog myDialog;
 
     public currentRideAdapter(Context context, List<acceptRequest> dHistory){
 
@@ -116,19 +138,32 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
     userID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
 
 
-    Location mLocationNow=((HomeActivity)context).mCurrentLocation;
+    db.collection("driveravailable").document(userID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        @Override
+        public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                    driverAvailable driverAvailable = documentSnapshot.toObject(com.example.raza.total_logix_driver.DTO.driverAvailable.class);
+                    DriverLocation=driverAvailable.getDriverLocation();
+        }
+    });
+
+    /*Location mLocationNow=((HomeActivity)context).mCurrentLocation;
 
     DriverLocation= new GeoPoint (mLocationNow.getLatitude(),mLocationNow.getLongitude());
+*/
+    CurrentLocation= DriverLocation;
 
-    CurrentLocation= new GeoPoint(mLocationNow.getLatitude(),mLocationNow.getLongitude());
-
-    SuzukiRate= 200;
-    RikshaRate=90;
-    SuzukiBase=600;
-    RikshaBase=270;
-    DriverLoadingRate=150;
-    totallogixsharepercent=20;
-
+    db.collection("settings").document("rates").addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        @Override
+        public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+            settings settings = documentSnapshot.toObject(settings.class);
+            SuzukiRate = settings.getSuzukirate();
+            RikshaRate = settings.getRiksharate();
+            SuzukiBase = settings.getSuzukibase();
+            RikshaBase = settings.getRikshabase();
+            DriverLoadingRate = settings.getDriverloadingRate();
+            totallogixsharepercent = settings.getTotallogixsharepercent();
+        }
+    });
 
 
         NumberFormat numberFormat = new DecimalFormat("#'Mins'");
@@ -136,7 +171,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
         NumberFormat distanceFormat = new DecimalFormat("#.##'KM'");
         StringEstDistance=distanceFormat.format(dHistory.get(position).getEstDistance());
         StringRideDistance=distanceFormat.format(dHistory.get(position).getRidedistance());
-        DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy h:mm a");
+        final DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy h:mm a");
         StringDateTime = dateFormat.format(dHistory.get(position).getDate());
 
 
@@ -156,25 +191,33 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
         holder.mEstRideDistance.setText(distanceFormat.format(dHistory.get(position).getEstDistance()));
         holder.mDatetime.setText(dateFormat.format(dHistory.get(position).getDate()));
 
-        final Dialog myDialog = new Dialog(context);
-        myDialog.setContentView(R.layout.additional_detail_dialog);
+
 
 
         holder.mReached.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                db.collection("driveravailable").document(userID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                        driverAvailable driverAvailable = documentSnapshot.toObject(com.example.raza.total_logix_driver.DTO.driverAvailable.class);
+                        DriverLocation=driverAvailable.getDriverLocation();
+                    }
+                });
+
+                CurrentLocation= DriverLocation;
 
 
                 holder.mReached.setVisibility(View.GONE);
                 holder.mStart.setVisibility(View.VISIBLE);
                 String Status = "Waiting";
-                Location mLocationNow=((HomeActivity)context).mCurrentLocation;
+                /*Location mLocationNow=((HomeActivity)context).mCurrentLocation;
 
                 DriverLocation= new GeoPoint (mLocationNow.getLatitude(),mLocationNow.getLongitude());
 
                 CurrentLocation= new GeoPoint(mLocationNow.getLatitude(),mLocationNow.getLongitude());
-                Date date =  Calendar.getInstance().getTime();
+*/                Date date =  Calendar.getInstance().getTime();
                 waitDate1=date;
                 driverHistory driverHistory = new driverHistory(
                         dHistory.get(position).getName(),
@@ -252,14 +295,27 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
             public void onClick(View v) {
 
 
+                db.collection("driveravailable").document(userID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                        driverAvailable driverAvailable = documentSnapshot.toObject(com.example.raza.total_logix_driver.DTO.driverAvailable.class);
+                        DriverLocation=driverAvailable.getDriverLocation();
+                    }
+                });
+
+                CurrentLocation= DriverLocation;
+
+
                 holder.mStart.setVisibility(View.GONE);
                 holder.mFinish.setVisibility(View.VISIBLE);
+/*
 
                 Location mLocationNow=((HomeActivity)context).mCurrentLocation;
 
                 DriverLocation= new GeoPoint (mLocationNow.getLatitude(),mLocationNow.getLongitude());
 
                 CurrentLocation= new GeoPoint(mLocationNow.getLatitude(),mLocationNow.getLongitude());
+*/
 
 
                 Long min=diffTime();
@@ -343,14 +399,27 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
             @Override
             public void onClick(View v) {
 
+
+                db.collection("driveravailable").document(userID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                        driverAvailable driverAvailable = documentSnapshot.toObject(com.example.raza.total_logix_driver.DTO.driverAvailable.class);
+                        DriverLocation=driverAvailable.getDriverLocation();
+                    }
+                });
+
+                CurrentLocation= DriverLocation;
+
                 holder.mFinish.setVisibility(View.GONE);
                 holder.mPayment.setVisibility(View.VISIBLE);
 
+/*
                 Location mLocationNow=((HomeActivity)context).mCurrentLocation;
 
                 DriverLocation= new GeoPoint (mLocationNow.getLatitude(),mLocationNow.getLongitude());
 
                 CurrentLocation= new GeoPoint(mLocationNow.getLatitude(),mLocationNow.getLongitude());
+*/
 
                 String Status = "Waiting for Payment";
                 Location loc1 = new Location("");
@@ -462,35 +531,36 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
             public void onClick(View v) {
 
                 totalfarepaymentfloat = dHistory.get(position).getRidefare();
-
-                TextView mTotalFare=(TextView)myDialog.findViewById(R.id.totalfarepayment);
-                final TextView mWalletBalance=(TextView)myDialog.findViewById(R.id.walletbalancepayment);
-                TextView mReaminingBalance=(TextView)myDialog.findViewById(R.id.remainingpayment);
-                final EditText mAddAmount=(EditText)myDialog.findViewById(R.id.addtowalletEditPayment);
-                Button mPay=(Button)myDialog.findViewById(R.id.pay_button);
+                myDialog = new Dialog(context);
+                myDialog.setContentView(R.layout.additional_detail_dialog);
+                myDialog.show();
+                TextView mTotalFare = (TextView) myDialog.findViewById(R.id.totalfarepayment);
+                final TextView mWalletBalance = (TextView) myDialog.findViewById(R.id.walletbalancepayment);
+                TextView mReaminingBalance = (TextView) myDialog.findViewById(R.id.remainingpayment);
+                final EditText mAddAmount = (EditText) myDialog.findViewById(R.id.addtowalletEditPayment);
+                Button mPay = (Button) myDialog.findViewById(R.id.btn_pay);
 
                 mTotalFare.setText(RsFormat.format(totalfarepaymentfloat));
                 db.collection("wallet").document(dHistory.get(position).getCID()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
                     public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                                wallet wallet = documentSnapshot.toObject(wallet.class);
-                                walletpaymentfloat=wallet.getAmount();
-                                mWalletBalance.setText(RsFormat.format(walletpaymentfloat));
+                        wallet wallet = documentSnapshot.toObject(wallet.class);
+                        walletpaymentfloat = wallet.getAmount();
+                        mWalletBalance.setText(RsFormat.format(walletpaymentfloat));
 
                     }
                 });
 
-                remainingbalancefloat=totalfarepaymentfloat-walletpaymentfloat;
+                remainingbalancefloat = totalfarepaymentfloat - walletpaymentfloat;
                 mReaminingBalance.setText(RsFormat.format(remainingbalancefloat));
 
 
                 mPay.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                         String Status = "Completed";
-                        String PaymentStatus="Paid";
-                        String PaidVia= "Driver";
+                        String PaymentStatus = "Paid";
+                        String PaidVia = "Driver";
                         driverHistory driverHistory = new driverHistory(
                                 dHistory.get(position).getName(),
                                 dHistory.get(position).getOriginalpickup(),
@@ -513,7 +583,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                                 dHistory.get(position).getDriverdp(),
                                 dHistory.get(position).getDrivernic(),
                                 dHistory.get(position).getDriverphone(),
-                                DriverLocation,
+                                dHistory.get(position).getDriverlocation(),
                                 dHistory.get(position).getCarregno(),
                                 dHistory.get(position).getDriverid(),
                                 Status,
@@ -521,7 +591,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                                 PaidVia,
                                 PaymentStatus,
                                 dHistory.get(position).getWaitingtime(),
-                                dHistory.get(position).getUniqueID(),dHistory.get(position).getSettlement(),dHistory.get(position).getRidestars(),dHistory.get(position).getEstDistance(),dHistory.get(position).getGatepass());
+                                dHistory.get(position).getUniqueID(), dHistory.get(position).getSettlement(), dHistory.get(position).getRidestars(), dHistory.get(position).getEstDistance(), dHistory.get(position).getGatepass());
                         acceptRequest acceptRequest = new acceptRequest(
                                 dHistory.get(position).getName(),
                                 dHistory.get(position).getOriginalpickup(),
@@ -544,7 +614,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                                 dHistory.get(position).getDriverdp(),
                                 dHistory.get(position).getDrivernic(),
                                 dHistory.get(position).getDriverphone(),
-                                DriverLocation,
+                                dHistory.get(position).getDriverlocation(),
                                 dHistory.get(position).getCarregno(),
                                 dHistory.get(position).getDriverid(),
                                 Status,
@@ -553,36 +623,85 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                                 PaymentStatus,
                                 dHistory.get(position).getStatusdate(),
                                 dHistory.get(position).getWaitingtime(),
-                                dHistory.get(position).getUniqueID(),dHistory.get(position).getSettlement(),dHistory.get(position).getRidestars(),dHistory.get(position).getEstDistance(),dHistory.get(position).getGatepass()
+                                dHistory.get(position).getUniqueID(), dHistory.get(position).getSettlement(), dHistory.get(position).getRidestars(), dHistory.get(position).getEstDistance(), dHistory.get(position).getGatepass()
                         );
 
-                        float newcurrentcash= Float.valueOf(mAddAmount.getText().toString());
+                        float newcurrentcash = Float.valueOf(mAddAmount.getText().toString());
 
                         db.collection("currentCash").document(userID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
                             @Override
                             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                                 currentCash currentCash = documentSnapshot.toObject(currentCash.class);
-                                oldcurrentcashfloat=currentCash.getCurrentcash();
-                                oldtotalfarepending=currentCash.getTotalfarepending();
-                                oldtotaljourney=currentCash.getTotaljourney();
-                                oldDrivershare=currentCash.getTotaldriversharepending();
-                                oldtotalfarepending=currentCash.getTotlalogixsharepending();
+                                oldcurrentcashfloat = currentCash.getCurrentcash();
+                                oldtotalfarepending = currentCash.getTotalfarepending();
+                                oldtotaljourney = currentCash.getTotaljourney();
+                                oldDrivershare = currentCash.getTotaldriversharepending();
+                                oldtotalfarepending = currentCash.getTotlalogixsharepending();
 
                             }
                         });
-                        float currentcash = oldcurrentcashfloat+newcurrentcash;
-                        float totalfarepending= oldtotalfarepending+dHistory.get(position).getRidefare();
-                        float newtotallogixshare=  dHistory.get(position).getRidefare()*totallogixsharepercent;
-                        float totallogixshare=oldtotalfarepending+newtotallogixshare;
-                        float newdrivershare= oldtotalfarepending+dHistory.get(position).getRidefare()-totallogixshare;
-                        float drivershare=oldDrivershare+newdrivershare;
-                        float totaljourney= oldtotaljourney+1;
-                        Date nowdate =  Calendar.getInstance().getTime();
-                        currentCash currentCash= new currentCash (currentcash, totalfarepending, drivershare, totallogixshare, totaljourney, nowdate);
+                        float currentcash = oldcurrentcashfloat + newcurrentcash;
+                        float totalfarepending = oldtotalfarepending + dHistory.get(position).getRidefare();
+                        final float newtotallogixshare = dHistory.get(position).getRidefare() * (totallogixsharepercent/100);
+                        float totallogixshare = oldtotalfarepending + newtotallogixshare;
+                        float newdrivershare = dHistory.get(position).getRidefare() - totallogixshare;
+                        float drivershare = oldtotalfarepending + newdrivershare;
+                        float totaljourney = oldtotaljourney + 1;
+                        Date nowdate = Calendar.getInstance().getTime();
+                        String Source = "Driver";
+                        float thCurrentWallet = walletpaymentfloat + dHistory.get(position).getRidefare();
+                        float paid = -(dHistory.get(position).getRidefare());
+                        float thpaidwallet = thCurrentWallet - dHistory.get(position).getRidefare();
+                        db.collection("totalearning").document("admin").addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                            @Override
+                            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                                totalearning totalearning = documentSnapshot.toObject(totalearning.class);
+                                completetotalearning = totalearning.getTotalearning() + dHistory.get(position).getRidefare();
+                                completetotallogixshare = totalearning.getTotallogixearning() + newtotallogixshare;
+                                completetotalride = totalearning.getTotalrides() + 1;
+                            }
+                        });
 
 
+                        db.collection("overallcash").document(userID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                            @Override
+                            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                                overallcash overallcash = documentSnapshot.toObject(com.example.raza.total_logix_driver.DTO.overallcash.class);
+                                occashold = overallcash.getCash();
+                                ocfareold = overallcash.getFare();
+                                oclogixshareold = overallcash.getLogixshare();
+                                ocdrivershareold = overallcash.getDrivershare();
+                                octotaljourneyold = overallcash.getTotaljourney();
+
+                            }
+                        });
 
 
+                        occash = occashold + newcurrentcash;
+                        ocfare = ocfareold + dHistory.get(position).getRidefare();
+                        oclogixshare = oclogixshareold + newtotallogixshare;
+                        ocdrivershare = ocdrivershareold + newdrivershare;
+                        octotaljourney = octotaljourneyold + 1;
+
+                        currentCash currentCash = new currentCash(currentcash, totalfarepending, drivershare, totallogixshare, totaljourney, nowdate);
+                        DriverTransactionHistory driverTransactionHistory = new DriverTransactionHistory(nowdate, dHistory.get(position).getCID(), newcurrentcash, oldcurrentcashfloat, currentcash, userID);
+                        overallcash overallcash = new overallcash(occash, ocfare, ocdrivershare, oclogixshare, octotaljourney, nowdate);
+                        transactionhistory transactionhistory = new transactionhistory(dHistory.get(position).getRidefare(), nowdate, dHistory.get(position).getCID(), Source, walletpaymentfloat, thCurrentWallet);
+
+                        totalearning totalearning = new totalearning(completetotalearning, completetotalride, completetotallogixshare, nowdate);
+                        UniqueID = userID + nowdate.toString();
+                        float extracash= remainingbalancefloat-newcurrentcash;
+                        float walletupdateamount = walletpaymentfloat+extracash;
+                        wallet wallet = new wallet(walletupdateamount,nowdate);
+                        transactionhistory transactionhistory1 = new transactionhistory(paid, nowdate, dHistory.get(position).getCID(), Source, thpaidwallet,walletupdateamount );
+
+                        db.collection("currentCash").document(userID).set(currentCash);
+                        db.collection("overallcash").document(userID).set(overallcash);
+                        db.collection("driverTransactionHistory").document(dHistory.get(position).getUniqueID()).set(driverTransactionHistory);
+                        db.collection("transactionhistory").document(UniqueID).set(transactionhistory);
+                        db.collection("wallet").document(dHistory.get(position).getCID()).set(wallet);
+                        db.collection("transactionhistory").document(UniqueID).set(transactionhistory1);
+                        db.collection("totalearning").document("admin").set(totalearning);
                         db.collection("acceptRequest").document(dHistory.get(position).getUniqueID()).set(acceptRequest);
                         db.collection("CustomerHistory").document(dHistory.get(position).getUniqueID()).set(driverHistory);
                         db.collection("DriverHistory").document(dHistory.get(position).getUniqueID()).set(driverHistory);
@@ -609,25 +728,6 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
 
                     }
                 });
-
-
-                /* db.collection("acceptRequest").document(dHistory.get(position).getUniqueID()).delete()
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                                Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                                Intent intent = new Intent(context, HomeActivity.class);
-                                context.startActivity(intent);
-                            }
-
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "Error deleting document", e);
-                            }
-                        });*/
 
             }
         });

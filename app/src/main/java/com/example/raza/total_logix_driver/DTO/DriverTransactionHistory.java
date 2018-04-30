@@ -9,7 +9,7 @@ public class DriverTransactionHistory {
     private float amountadded;
     private float oldamount;
     private float newtotal;
-    private String transaction;
+    private String driverID;
 
 
 
@@ -18,7 +18,7 @@ public class DriverTransactionHistory {
 
     }
 
-    public DriverTransactionHistory(Date transactiondate, String customerID, float amountadded,float oldamount, float newtotal, String transaction){
+    public DriverTransactionHistory(Date transactiondate, String customerID, float amountadded,float oldamount, float newtotal, String driverID){
 
 
         this.transactiondate = transactiondate;
@@ -26,7 +26,7 @@ public class DriverTransactionHistory {
         this.amountadded = amountadded;
         this.oldamount = oldamount;
         this.newtotal = newtotal;
-        this.transaction = transaction;
+        this.driverID = driverID;
     }
 
     public Date getTransactiondate() {
@@ -69,11 +69,11 @@ public class DriverTransactionHistory {
         this.newtotal = newtotal;
     }
 
-    public String getTransaction() {
-        return transaction;
+    public String getDriverID() {
+        return driverID;
     }
 
-    public void setTransaction(String transaction) {
-        this.transaction = transaction;
+    public void setDriverID(String driverID) {
+        this.driverID = driverID;
     }
 }
