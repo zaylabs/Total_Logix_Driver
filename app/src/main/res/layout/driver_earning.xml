@@ -26,11 +26,11 @@
 
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
-                android:text="@string/total_rides"
+                android:text="@string/total_logix"
                 android:textSize="@dimen/margin_20" />
 
             <TextView
-                android:id="@+id/txt_total_ridecount"
+                android:id="@+id/txt_totallogix"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
-                android:text="@string/earnings"
+                android:text="Stats"
                 android:textSize="@dimen/margin_20" />
 
             <FrameLayout
@@ -109,11 +109,11 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/total_logix"
+                        android:text="Total Fare"
                         android:textSize="@dimen/margin_20" />
 
                     <TextView
-                        android:id="@+id/txt_totallogix"
+                        android:id="@+id/txt_totalfare"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"

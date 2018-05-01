@@ -46,7 +46,7 @@
     <string name="menu_payment">Payment History</string>
     <string name="menu_help">Help</string>
     <string name="menu_logout">Logout</string>
-    <string name="total_rides">Total Rides</string>
+
     <string name="ride_count">00</string>
     <string name="earnings">Earnings</string>
     <string name="today">Today</string>
@@ -110,7 +110,7 @@
     <string name="fare">Fare</string>
     <string name="sample_fare">Rs.800</string>
     <string name="paid_via">Paid Via</string>
-    <string name="cash">Cash</string>
+
     <string name="settlement">Settlement</string>
     <string name="settlement_sample">pending</string>
     <string name="total_distance">Total Distance</string>
@@ -137,6 +137,12 @@
     <string name="total_logix">Total Logix</string>
     <string name="logo">Logo</string>
     <string name="total_earning">Total Earning</string>
+    <string name="wallet">Wallet</string>
+    <string name="total_logix_id">Total Logix ID</string>
+    <string name="total_cash">Total Cash</string>
+    <string name="total_fare">Total Fare</string>
+    <string name="driver_earning">Driver Earning</string>
+    <string name="total_logix_share">Total Logix Share</string>
 
 
 </resources>

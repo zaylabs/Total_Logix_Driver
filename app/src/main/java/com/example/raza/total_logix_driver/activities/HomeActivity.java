@@ -45,8 +45,10 @@ import com.example.raza.total_logix_driver.DTO.driverAvailable;
 import com.example.raza.total_logix_driver.DTO.driverProfile;
 import com.example.raza.total_logix_driver.R;
 import com.example.raza.total_logix_driver.fragment.DriverHistoryFragment;
+import com.example.raza.total_logix_driver.fragment.paymentHistoryFragment;
 import com.example.raza.total_logix_driver.fragment.profileFragment;
 import com.example.raza.total_logix_driver.fragment.transactionhistoryFragment;
+import com.example.raza.total_logix_driver.fragment.walletFragment;
 import com.example.raza.total_logix_driver.recylerViewAdapters.customerRequestAdapter;
 import com.example.raza.total_logix_driver.suportclasses.PermissionUtils;
 import com.google.android.gms.common.api.ApiException;
@@ -230,11 +232,10 @@ public class HomeActivity extends BaseActivity
     private customerRequest request;
     private String user_id;
     private String TAG = "";
-    private TextView mCash,mLogix,mEarned;
-    private String Cash;
-    private String Logix;
-    private String Earned;
+    private TextView mCash,mLogix,mEarned,mTotalFare;
+
     private NumberFormat RsFormat = new DecimalFormat("'Rs.'#");
+    private NumberFormat logixformat=new DecimalFormat("#");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -269,7 +270,7 @@ public class HomeActivity extends BaseActivity
         mCash=findViewById(R.id.txt_cash);
         mLogix=findViewById(R.id.txt_totallogix);
         mEarned=findViewById(R.id.txt_earned);
-
+        mTotalFare=findViewById(R.id.txt_totalfare);
         mJobList=findViewById(R.id.joblistframe);
         cRequests = new ArrayList<>();
         customerRequestAdapter = new customerRequestAdapter(this, cRequests);
@@ -279,15 +280,7 @@ public class HomeActivity extends BaseActivity
         mListview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         mListview.setAdapter(customerRequestAdapter);
 
-        firestoreDB.collection("currentCash").document(user_id).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                currentCash currentCash = documentSnapshot.toObject(com.example.raza.total_logix_driver.DTO.currentCash.class);
-                mCash.setText(RsFormat.format(currentCash.getCurrentcash()));
-                mLogix.setText(String.valueOf(currentCash.getTotaljourney()));
-                mEarned.setText(RsFormat.format(currentCash.getTotaldriversharepending()));
-            }
-        });
+
 
 
 // *********************Location Update ************************************
@@ -308,6 +301,31 @@ public class HomeActivity extends BaseActivity
         createLocationRequest();
         buildLocationSettingsRequest();
 
+        firestoreDB.collection("currentCash").document(userID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                    currentCash currentCash = documentSnapshot.toObject(com.example.raza.total_logix_driver.DTO.currentCash.class);
+                    String stringcash=RsFormat.format(currentCash.getCurrentcash());
+                    if (stringcash!=null){
+                        mCash.setText(stringcash);
+                    }
+                String stringfare=RsFormat.format(currentCash.getTotalfarepending());
+                if (stringfare!=null){
+                    mTotalFare.setText(stringfare);
+                }
+                String stringearned=RsFormat.format(currentCash.getTotaldriversharepending());
+                if (stringearned!=null){
+                    mEarned.setText(stringearned);
+                }
+                String stringlogix=logixformat.format(currentCash.getTotaljourney());
+                if (stringlogix!=null){
+                    mLogix.setText(stringlogix);
+                }
+
+
+
+            }
+        });
 
         //**************************************Location update End ****************************8
 
@@ -351,6 +369,8 @@ public class HomeActivity extends BaseActivity
         }
 
         sMapFragment.getMapAsync(this);
+
+
     }
 
 
@@ -555,8 +575,17 @@ public class HomeActivity extends BaseActivity
                 ft.commit();
                 break;
             case R.id.payment_detail:
+                hideFooter();
+                ft.replace(R.id.cm, new paymentHistoryFragment());
+                ft.commit();
+                break;
+            case R.id.wallet:
+                hideFooter();
+                ft.replace(R.id.cm, new walletFragment());
+                ft.commit();
 
                 break;
+
             case R.id.profile:
                 hideFooter();
                 ft.replace(R.id.cm, new profileFragment());
@@ -624,6 +653,7 @@ public class HomeActivity extends BaseActivity
         enableMyLocation();
         setOnMyLocationButtonClick();
         setOnMyLocationClick();
+
 
     }
 

@@ -26,6 +26,13 @@
             android:id="@+id/payment_detail"
             android:icon="@mipmap/ic_payment_black_24dp"
             android:title="@string/menu_payment" />
+
+        <item
+            android:id="@+id/wallet"
+            android:icon="@drawable/ic_monetization_on_black_24dp"
+            android:title="@string/wallet" />
+
+
         <item
             android:id="@+id/help"
             android:icon="@drawable/ic_menu_send"

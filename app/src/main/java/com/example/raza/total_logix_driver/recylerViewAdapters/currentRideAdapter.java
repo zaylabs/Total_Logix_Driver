@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ import com.example.raza.total_logix_driver.DTO.overallcash;
 import com.example.raza.total_logix_driver.DTO.settings;
 import com.example.raza.total_logix_driver.DTO.totalearning;
 import com.example.raza.total_logix_driver.DTO.transactionhistory;
+import com.example.raza.total_logix_driver.DTO.userProfile;
 import com.example.raza.total_logix_driver.DTO.wallet;
 import com.example.raza.total_logix_driver.R;
 import com.example.raza.total_logix_driver.activities.Current_Ride_Activity;
@@ -70,7 +72,8 @@ private FirebaseFirestore db;
 private FirebaseAuth mAuth;
 private String userID;
 private String UniqueID;
-
+private float customertotalrating;
+private float customertotalrides;
 private Date waitDate1;
 private Date waitDate2;
 private Float waiting;
@@ -539,7 +542,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                 TextView mReaminingBalance = (TextView) myDialog.findViewById(R.id.remainingpayment);
                 final EditText mAddAmount = (EditText) myDialog.findViewById(R.id.addtowalletEditPayment);
                 Button mPay = (Button) myDialog.findViewById(R.id.btn_pay);
-
+                final RatingBar mRatingbar=(RatingBar)myDialog.findViewById(R.id.payCustomerRating);
                 mTotalFare.setText(RsFormat.format(totalfarepaymentfloat));
                 db.collection("wallet").document(dHistory.get(position).getCID()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
@@ -561,6 +564,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                         String Status = "Completed";
                         String PaymentStatus = "Paid";
                         String PaidVia = "Driver";
+                        final float customerrating = mRatingbar.getRating();
                         driverHistory driverHistory = new driverHistory(
                                 dHistory.get(position).getName(),
                                 dHistory.get(position).getOriginalpickup(),
@@ -591,7 +595,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                                 PaidVia,
                                 PaymentStatus,
                                 dHistory.get(position).getWaitingtime(),
-                                dHistory.get(position).getUniqueID(), dHistory.get(position).getSettlement(), dHistory.get(position).getRidestars(), dHistory.get(position).getEstDistance(), dHistory.get(position).getGatepass());
+                                dHistory.get(position).getUniqueID(), dHistory.get(position).getSettlement(), customerrating, dHistory.get(position).getEstDistance(), dHistory.get(position).getGatepass());
                         acceptRequest acceptRequest = new acceptRequest(
                                 dHistory.get(position).getName(),
                                 dHistory.get(position).getOriginalpickup(),
@@ -623,7 +627,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                                 PaymentStatus,
                                 dHistory.get(position).getStatusdate(),
                                 dHistory.get(position).getWaitingtime(),
-                                dHistory.get(position).getUniqueID(), dHistory.get(position).getSettlement(), dHistory.get(position).getRidestars(), dHistory.get(position).getEstDistance(), dHistory.get(position).getGatepass()
+                                dHistory.get(position).getUniqueID(), dHistory.get(position).getSettlement(), customerrating, dHistory.get(position).getEstDistance(), dHistory.get(position).getGatepass()
                         );
 
                         float newcurrentcash = Float.valueOf(mAddAmount.getText().toString());
@@ -656,9 +660,20 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                             @Override
                             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                                 totalearning totalearning = documentSnapshot.toObject(totalearning.class);
-                                completetotalearning = totalearning.getTotalearning() + dHistory.get(position).getRidefare();
-                                completetotallogixshare = totalearning.getTotallogixearning() + newtotallogixshare;
-                                completetotalride = totalearning.getTotalrides() + 1;
+                                completetotalearning = totalearning.getTotalearning();
+                                completetotallogixshare = totalearning.getTotallogixearning();
+                                completetotalride = totalearning.getTotalrides();
+                            }
+                        });
+
+
+
+                        db.collection("customers").document(userID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                            @Override
+                            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                                userProfile userProfile=documentSnapshot.toObject(com.example.raza.total_logix_driver.DTO.userProfile.class);
+                                customertotalrating=userProfile.getStars();
+                                customertotalrides=userProfile.getTotalrides();
                             }
                         });
 
@@ -684,16 +699,53 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                         octotaljourney = octotaljourneyold + 1;
 
                         currentCash currentCash = new currentCash(currentcash, totalfarepending, drivershare, totallogixshare, totaljourney, nowdate);
-                        DriverTransactionHistory driverTransactionHistory = new DriverTransactionHistory(nowdate, dHistory.get(position).getCID(), newcurrentcash, oldcurrentcashfloat, currentcash, userID);
+                        DriverTransactionHistory driverTransactionHistory = new DriverTransactionHistory(nowdate, dHistory.get(position).getCID(),dHistory.get(position).getName(), newcurrentcash, oldcurrentcashfloat, currentcash, userID);
                         overallcash overallcash = new overallcash(occash, ocfare, ocdrivershare, oclogixshare, octotaljourney, nowdate);
                         transactionhistory transactionhistory = new transactionhistory(dHistory.get(position).getRidefare(), nowdate, dHistory.get(position).getCID(), Source, walletpaymentfloat, thCurrentWallet);
 
-                        totalearning totalearning = new totalearning(completetotalearning, completetotalride, completetotallogixshare, nowdate);
+                        float totaltlfare=completetotalearning+ dHistory.get(position).getRidefare();
+                        float totaltlshare=completetotallogixshare + newtotallogixshare;
+                        float totaltlrides= completetotalride  + 1;;
+
+                        totalearning totalearning = new totalearning(totaltlfare, totaltlrides, totaltlshare, nowdate);
                         UniqueID = userID + nowdate.toString();
                         float extracash= remainingbalancefloat-newcurrentcash;
                         float walletupdateamount = walletpaymentfloat+extracash;
                         wallet wallet = new wallet(walletupdateamount,nowdate);
                         transactionhistory transactionhistory1 = new transactionhistory(paid, nowdate, dHistory.get(position).getCID(), Source, thpaidwallet,walletupdateamount );
+
+
+
+                        float totalcustomerRatingcalculated=(customerrating+customertotalrating)/customertotalrides;
+                        float totalcustomerridesupdate= customertotalrides+1;
+
+                        db.collection("customers").document(userID).update("totalrides", totalcustomerridesupdate)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "DocumentSnapshot successfully updated!");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error updating document", e);
+                                    }
+                                });
+
+                        db.collection("customers").document(userID).update("stars", totalcustomerRatingcalculated)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "DocumentSnapshot successfully updated!");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error updating document", e);
+                                    }
+                                });
 
                         db.collection("currentCash").document(userID).set(currentCash);
                         db.collection("overallcash").document(userID).set(overallcash);

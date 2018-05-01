@@ -311,7 +311,6 @@
                         android:gravity="end"
                         android:numStars="@integer/starts"
                         android:padding="1dp"
-                        android:text="@string/sample_phone"
                         android:textStyle="bold"
                         tools:gravity="end"
                         android:clickable="false"

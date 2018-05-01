@@ -23,6 +23,7 @@ import com.example.raza.total_logix_driver.DTO.DriverTransactionHistory;
 import com.example.raza.total_logix_driver.DTO.currentCash;
 import com.example.raza.total_logix_driver.DTO.driverProfile;
 import com.example.raza.total_logix_driver.DTO.overallcash;
+import com.example.raza.total_logix_driver.DTO.settlementHistory;
 import com.example.raza.total_logix_driver.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -223,14 +224,13 @@ public class RegisterActivity extends BaseActivity {
         db.collection("vt").document(userID).set(vahicletype);
 
         currentCash currentCash= new currentCash (0, 0, 0, 0, 0, currentDate);
-        DriverTransactionHistory driverTransactionHistory = new DriverTransactionHistory(currentDate, null,0 ,0,0,userID);
+        DriverTransactionHistory driverTransactionHistory = new DriverTransactionHistory(currentDate, "","",0 ,0,0,userID);
         overallcash overallcash = new overallcash(0, 0, 0,0, 0, currentDate);
+        settlementHistory settlementHistory = new settlementHistory("",userID,0, 0, 0, 0,0,currentDate);
         db.collection("currentCash").document(userID).set(currentCash);
         db.collection("overallcash").document(userID).set(overallcash);
         db.collection("driverTransactionHistory").document(userID+currentDate.toString()).set(driverTransactionHistory);
-
-
-
+        db.collection("settlementHistory").document(userID+currentDate.toString()).set(settlementHistory);
     }
 
 

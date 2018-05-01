@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="@color/white"
         android:paddingTop="5dp"
-
+        android:gravity="center"
         android:layout_gravity="center"
         >
 
@@ -23,30 +24,27 @@
             android:id="@+id/mapview"
             android:src="@drawable/ic_launcher"
             android:foregroundGravity="center"
+
             />
 
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/scrollviewrequest"
-            android:layout_below="@id/mapview"
-            >
 
             <LinearLayout
                 android:background="@color/white"
                 android:id="@+id/linear_child1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
-                android:layout_below="@+id/scrollviewrequest"
-                android:orientation="vertical">
+                android:layout_below="@+id/mapview"
+                android:orientation="vertical"
+                android:gravity="center"
+                >
 
 
                 <TableLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_20"
+
                     >
 
 
@@ -146,6 +144,37 @@
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                             />
                     </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0dp"
+                        android:padding="10dp"
+                        android:gravity="center">
+
+                        <TextView
+
+                            android:text="Rate Customer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                            />
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0dp"
+                        android:padding="10dp"
+                        android:gravity="center">
+                        <RatingBar
+                            android:id="@+id/payCustomerRating"
+                            android:layout_gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:numStars="@integer/starts"
+                            android:clickable="true"
+                            />
+                    </TableRow>
 
                     <TableRow
                         android:layout_width="match_parent"
@@ -167,12 +196,10 @@
 
                     </TableRow>
 
-
                 </TableLayout>
 
 
             </LinearLayout>
-        </ScrollView>
 
 
 
