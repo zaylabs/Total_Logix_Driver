@@ -58,7 +58,7 @@ public class paymentHistoryFragment extends android.app.Fragment {
 
         dHistory = new ArrayList<>();
         driverHistoryAdapter = new settlementHistoryAdapter(getActivity(),dHistory);
-        mDhistory = (RecyclerView)view.findViewById(R.id.tHistoryRV);
+        mDhistory = (RecyclerView)view.findViewById(R.id.phHistoryRV);
         mDhistory.setHasFixedSize(true);
         mDhistory.setLayoutManager(new LinearLayoutManager(getActivity()));
         mDhistory.setAdapter(driverHistoryAdapter);

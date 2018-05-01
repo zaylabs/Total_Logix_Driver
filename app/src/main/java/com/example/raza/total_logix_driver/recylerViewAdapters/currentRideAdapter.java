@@ -23,7 +23,9 @@ import com.example.raza.total_logix_driver.DTO.acceptRequest;
 import com.example.raza.total_logix_driver.DTO.currentCash;
 import com.example.raza.total_logix_driver.DTO.driverAvailable;
 import com.example.raza.total_logix_driver.DTO.driverHistory;
+import com.example.raza.total_logix_driver.DTO.driverRating;
 import com.example.raza.total_logix_driver.DTO.overallcash;
+import com.example.raza.total_logix_driver.DTO.ratingUpdate;
 import com.example.raza.total_logix_driver.DTO.settings;
 import com.example.raza.total_logix_driver.DTO.totalearning;
 import com.example.raza.total_logix_driver.DTO.transactionhistory;
@@ -54,7 +56,9 @@ import java.time.Year;
 import java.util.Calendar;
 import java.util.Date;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import static android.support.constraint.Constraints.TAG;
@@ -74,6 +78,8 @@ private String userID;
 private String UniqueID;
 private float customertotalrating;
 private float customertotalrides;
+private float drivertotalrating;
+private float drivertotalrides;
 private Date waitDate1;
 private Date waitDate2;
 private Float waiting;
@@ -565,7 +571,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                         String PaymentStatus = "Paid";
                         String PaidVia = "Driver";
                         final float customerrating = mRatingbar.getRating();
-                        driverHistory driverHistory = new driverHistory(
+                        driverHistory customerHistory = new driverHistory(
                                 dHistory.get(position).getName(),
                                 dHistory.get(position).getOriginalpickup(),
                                 dHistory.get(position).getOriginaldrop(),
@@ -596,6 +602,37 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                                 PaymentStatus,
                                 dHistory.get(position).getWaitingtime(),
                                 dHistory.get(position).getUniqueID(), dHistory.get(position).getSettlement(), customerrating, dHistory.get(position).getEstDistance(), dHistory.get(position).getGatepass());
+                        driverHistory driverHistory = new driverHistory(
+                                dHistory.get(position).getName(),
+                                dHistory.get(position).getOriginalpickup(),
+                                dHistory.get(position).getOriginaldrop(),
+                                dHistory.get(position).getActualpickup(),
+                                dHistory.get(position).getActualdrop(),
+                                dHistory.get(position).getPhone(),
+                                dHistory.get(position).getDate(),
+                                dHistory.get(position).getCID(),
+                                dHistory.get(position).getVT(),
+                                dHistory.get(position).getWeight(),
+                                dHistory.get(position).getBoxes(),
+                                dHistory.get(position).getDescription(),
+                                dHistory.get(position).getDriverloading(),
+                                dHistory.get(position).getRidedistance(),
+                                dHistory.get(position).getPickupaddress(),
+                                dHistory.get(position).getDropaddress(),
+                                dHistory.get(position).getEstFare(),
+                                dHistory.get(position).getDrivername(),
+                                dHistory.get(position).getDriverdp(),
+                                dHistory.get(position).getDrivernic(),
+                                dHistory.get(position).getDriverphone(),
+                                dHistory.get(position).getDriverlocation(),
+                                dHistory.get(position).getCarregno(),
+                                dHistory.get(position).getDriverid(),
+                                Status,
+                                dHistory.get(position).getRidefare(),
+                                PaidVia,
+                                PaymentStatus,
+                                dHistory.get(position).getWaitingtime(),
+                                dHistory.get(position).getUniqueID(), dHistory.get(position).getSettlement(), dHistory.get(position).getRidestars(), dHistory.get(position).getEstDistance(), dHistory.get(position).getGatepass());
                         acceptRequest acceptRequest = new acceptRequest(
                                 dHistory.get(position).getName(),
                                 dHistory.get(position).getOriginalpickup(),
@@ -668,12 +705,22 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
 
 
 
-                        db.collection("customers").document(userID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                        db.collection("customers").document(dHistory.get(position).getCID()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
                             @Override
                             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                                 userProfile userProfile=documentSnapshot.toObject(com.example.raza.total_logix_driver.DTO.userProfile.class);
                                 customertotalrating=userProfile.getStars();
                                 customertotalrides=userProfile.getTotalrides();
+                            }
+                        });
+
+
+                        db.collection("drivers").document(userID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                            @Override
+                            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                                userProfile userProfile=documentSnapshot.toObject(com.example.raza.total_logix_driver.DTO.userProfile.class);
+                                drivertotalrating=userProfile.getStars();
+                                drivertotalrides=userProfile.getTotalrides();
                             }
                         });
 
@@ -709,43 +756,27 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
 
                         totalearning totalearning = new totalearning(totaltlfare, totaltlrides, totaltlshare, nowdate);
                         UniqueID = userID + nowdate.toString();
-                        float extracash= remainingbalancefloat-newcurrentcash;
-                        float walletupdateamount = walletpaymentfloat+extracash;
+                        float totalinwallet=walletpaymentfloat + newcurrentcash;
+                        float walletupdateamount = totalinwallet-dHistory.get(position).getRidefare();
                         wallet wallet = new wallet(walletupdateamount,nowdate);
                         transactionhistory transactionhistory1 = new transactionhistory(paid, nowdate, dHistory.get(position).getCID(), Source, thpaidwallet,walletupdateamount );
 
+                        float customerupdatedtotalride= customertotalrides+1;
+                        driverRating driverRating = new driverRating(drivertotalrating,0, 0,customerupdatedtotalride,userID,dHistory.get(position).getCID(), dHistory.get(position).getUniqueID());
 
-
-                        float totalcustomerRatingcalculated=(customerrating+customertotalrating)/customertotalrides;
                         float totalcustomerridesupdate= customertotalrides+1;
+                        float totalcustomerRatingcalculated=(customerrating+customertotalrating)/totalcustomerridesupdate;
 
-                        db.collection("customers").document(userID).update("totalrides", totalcustomerridesupdate)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Log.d(TAG, "DocumentSnapshot successfully updated!");
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.w(TAG, "Error updating document", e);
-                                    }
-                                });
+                        db.collection("driverRating").document(dHistory.get(position).getCID()).set(driverRating);
 
-                        db.collection("customers").document(userID).update("stars", totalcustomerRatingcalculated)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Log.d(TAG, "DocumentSnapshot successfully updated!");
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.w(TAG, "Error updating document", e);
-                                    }
-                                });
+                        Map<String, Object> customerUpdates = new HashMap<>();
+                        customerUpdates.put("totalrides",totalcustomerridesupdate);
+                        customerUpdates.put("stars",totalcustomerRatingcalculated);
+
+                        ratingUpdate ratingUpdate = new ratingUpdate(totalcustomerridesupdate,totalcustomerRatingcalculated);
+
+                        db.collection("customers").document(dHistory.get(position).getCID()).update(customerUpdates);
+
 
                         db.collection("currentCash").document(userID).set(currentCash);
                         db.collection("overallcash").document(userID).set(overallcash);
@@ -755,7 +786,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                         db.collection("transactionhistory").document(UniqueID).set(transactionhistory1);
                         db.collection("totalearning").document("admin").set(totalearning);
                         db.collection("acceptRequest").document(dHistory.get(position).getUniqueID()).set(acceptRequest);
-                        db.collection("CustomerHistory").document(dHistory.get(position).getUniqueID()).set(driverHistory);
+                        db.collection("CustomerHistory").document(dHistory.get(position).getUniqueID()).set(customerHistory);
                         db.collection("DriverHistory").document(dHistory.get(position).getUniqueID()).set(driverHistory);
 
 

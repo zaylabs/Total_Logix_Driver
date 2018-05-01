@@ -141,7 +141,7 @@
             android:paddingStart="30dp"
             android:paddingEnd="30dp"
             android:paddingTop="@dimen/margin_20"
-            android:visibility="gone"
+            android:visibility="invisible"
             android:layout_below="@+id/logolinier"
             >
 
@@ -192,9 +192,9 @@
             android:background="@color/text_color"
             android:padding="@dimen/margin_15"
             android:text="@string/total_earning"
-            android:layout_below="@id/unsettled_table"
+            android:layout_below="@id/totalearningtable"
             android:textStyle="normal"
-            android:visibility="visible"
+            android:visibility="invisible"
             />
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_unsettled"
@@ -205,7 +205,7 @@
             android:text="Unsettled Stats"
             android:layout_below="@+id/unsettled_table"
             android:textStyle="normal"
-            android:visibility="gone"
+            android:visibility="visible"
             />
 
 

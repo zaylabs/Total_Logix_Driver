@@ -76,7 +76,7 @@ public class profileFragment extends android.app.Fragment implements View.OnClic
     private String reg_number;
     private String vt;
     private float stars;
-
+    private float totalrides;
     public profileFragment() {
         // Required empty public constructor
     }
@@ -207,6 +207,7 @@ public class profileFragment extends android.app.Fragment implements View.OnClic
                 vt=profile.getVt();
                 stars=profile.getStars();
                 mRatingBar.setRating(stars);
+                totalrides=profile.getTotalrides();
             }
         });
 
@@ -219,7 +220,7 @@ public class profileFragment extends android.app.Fragment implements View.OnClic
         String name = mName.getText().toString();
 
         updatedate= Calendar.getInstance().getTime();
-        driverProfile profile = new driverProfile(name, phone, cnic, reg_number, vt, createdate, displaypic,stars);
+        driverProfile profile = new driverProfile(name, phone, cnic, reg_number, vt, createdate, displaypic,totalrides,stars);
         db.collection("drivers").document(userID).set(profile);
 
     }
