@@ -41,11 +41,12 @@ public class driverHistory {
     private float ridestars;
     private float estDistance;
     private String gatepass;
+    private Date arriveddate;
     driverHistory(){
 
         }
 
-        public driverHistory (String name, GeoPoint originalpickup, GeoPoint originaldrop, GeoPoint actualpickup, GeoPoint actualdrop, String phone, Date date, String CID, String VT, String weight, String boxes , String description, String driverloading, float ridedistance, String pickupaddress, String dropaddress, String estFare, String drivername, String driverdp, String drivernic, String driverphone, GeoPoint driverlocation, String carregno, String driverid, String status, float ridefare, String paidvia, String paymentstatus, float waitingtime, String uniqueID, String settlement, float ridestars, float estDistance, String gatepass){
+        public driverHistory (String name, GeoPoint originalpickup, GeoPoint originaldrop, GeoPoint actualpickup, GeoPoint actualdrop, String phone, Date date, String CID, String VT, String weight, String boxes , String description, String driverloading, float ridedistance, String pickupaddress, String dropaddress, String estFare, String drivername, String driverdp, String drivernic, String driverphone, GeoPoint driverlocation, String carregno, String driverid, String status, float ridefare, String paidvia, String paymentstatus, float waitingtime, String uniqueID, String settlement, float ridestars, float estDistance, String gatepass, Date arriveddate){
 
             this.name = name;
             this.originalpickup = originalpickup;
@@ -81,7 +82,8 @@ public class driverHistory {
             this.ridestars=ridestars;
             this.estDistance=estDistance;
             this.gatepass=gatepass;
-    }
+            this.arriveddate = arriveddate;
+        }
 
     public String getName() {
         return name;
@@ -354,6 +356,14 @@ public class driverHistory {
 
     public void setGatepass(String gatepass) {
         this.gatepass = gatepass;
+    }
+
+    public Date getArriveddate() {
+        return arriveddate;
+    }
+
+    public void setArriveddate(Date arriveddate) {
+        this.arriveddate = arriveddate;
     }
 }
 

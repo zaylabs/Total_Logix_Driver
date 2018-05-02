@@ -28,110 +28,134 @@
             />
 
 
+        <LinearLayout
+            android:id="@+id/linear_child1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/mapview"
+            android:background="@color/white"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/margin_10"
+            >
 
-            <LinearLayout
-                android:background="@color/white"
-                android:id="@+id/linear_child1"
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/mapview"
-                android:orientation="vertical"
-                android:gravity="center"
-                >
+                android:text="Total Fare"
+                android:paddingEnd="135dp"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
+            <TextView
+                android:id="@+id/totalfarepayment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sample_fare"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+        </LinearLayout>
+        <LinearLayout
+            android:background="@color/white"
+            android:id="@+id/linear_child2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linear_child1"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingBottom="@dimen/margin_10"
+            >
 
-                <TableLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_20"
-
-                    >
-
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="0dp"
-                        android:padding="10dp"
-                        android:gravity="center">
-
-                        <TextView
-                            android:text="Total Fare"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingEnd="@dimen/margin_20"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                            />
-
-                        <TextView
-                           android:id="@+id/totalfarepayment"
-                            android:hint="@string/sample_fare"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                            />
-                      </TableRow>
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="0dp"
-                        android:padding="10dp"
-                        android:gravity="center">
 
                         <TextView
                             android:text="Wallet Balance"
-                            android:layout_width="match_parent"
+                            android:paddingEnd="100dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingEnd="@dimen/margin_20"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                             />
 
                         <TextView
                             android:id="@+id/walletbalancepayment"
-                            android:hint="@string/sample_fare"
-                            android:layout_width="match_parent"
+                            android:text="@string/sample_fare"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                             />
-                    </TableRow>
+        </LinearLayout>
+        <LinearLayout
+            android:background="@color/white"
+            android:id="@+id/linear_child3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linear_child2"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingBottom="@dimen/margin_10"
+            >
 
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="0dp"
-                        android:padding="10dp"
-                        android:gravity="center">
 
-                        <TextView
+
+        <TextView
                             android:text="Remaining Due"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingEnd="@dimen/margin_20"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:paddingEnd="100dp"
                             />
 
                         <TextView
                             android:id="@+id/remainingpayment"
-                            android:hint="@string/sample_fare"
-                            android:layout_width="match_parent"
+                            android:text="@string/sample_fare"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                             />
-                    </TableRow>
+        </LinearLayout>
+        <LinearLayout
+            android:background="@color/white"
+            android:id="@+id/linear_child8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linear_child3"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingBottom="@dimen/margin_10"
+            >
 
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="0dp"
-                        android:padding="10dp"
-                        android:gravity="center">
 
+
+            <TextView
+                android:text="Wait Fine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:paddingEnd="150dp"
+                />
+
+            <TextView
+                android:id="@+id/waitfine"
+                android:text="0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:background="@color/white"
+            android:id="@+id/linear_child4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linear_child8"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingBottom="@dimen/margin_10"
+
+            >
                         <TextView
                             android:text="Add to Wallet"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingEnd="@dimen/margin_20"
+                            android:paddingEnd="100dp"
+                            android:layout_gravity="start"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                             />
 
@@ -139,33 +163,30 @@
                             android:id="@+id/addtowalletEditPayment"
                             android:hint="@string/sample_fare"
                             android:text="@string/zero"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                             />
-                    </TableRow>
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="0dp"
-                        android:padding="10dp"
-                        android:gravity="center">
+        </LinearLayout>
 
-                        <TextView
+        <LinearLayout
+            android:background="@color/white"
+            android:id="@+id/linear_child5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linear_child4"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:paddingBottom="@dimen/margin_10"
+            >
+            <TextView
 
-                            android:text="Rate Customer"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                            />
-                    </TableRow>
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="0dp"
-                        android:padding="10dp"
-                        android:gravity="center">
+                android:text="Rate Customer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                />
                         <RatingBar
                             android:id="@+id/payCustomerRating"
                             android:layout_gravity="center"
@@ -174,16 +195,21 @@
                             android:numStars="@integer/starts"
                             android:clickable="true"
                             />
-                    </TableRow>
+        </LinearLayout>
 
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="0dp"
-                        android:padding="10dp"
-                        android:gravity="center">
+        <LinearLayout
+            android:background="@color/white"
+            android:id="@+id/linear_child6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linear_child5"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:paddingBottom="@dimen/margin_10"
+            >
 
-                        <android.support.v7.widget.AppCompatButton
+
+        <android.support.v7.widget.AppCompatButton
                             android:id="@+id/btn_pay"
                             android:layout_width="@dimen/login_width"
                             android:layout_height="wrap_content"
@@ -194,12 +220,7 @@
                             android:text="Pay"
                             android:textColor="@color/black" />
 
-                    </TableRow>
-
-                </TableLayout>
-
-
-            </LinearLayout>
+        </LinearLayout>
 
 
 

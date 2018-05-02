@@ -8,27 +8,42 @@
 
     <LinearLayout
         android:id="@+id/LayoutCNIC"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:orientation="vertical">
+        android:orientation="vertical"
+       android:gravity="center"
+        >
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/mapview"
+            android:src="@drawable/ic_launcher"
+            android:foregroundGravity="center"
+
+            />
 
         <TextView
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_10"
             android:layout_marginBottom="1dp"
-            android:text="@string/Upload_cnic" />
+            android:text="@string/Upload_cnic"
+
+            />
 
         <LinearLayout
             android:id="@+id/LayoutCNICFrontBack"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_20"
+            >
 
             <ImageView
                 android:id="@+id/IMG_CNIC_Front"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_gravity="start"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:src="@drawable/ic_menu_camera"
@@ -37,7 +52,7 @@
                 android:onClick="cnicFront"
                 />
             <TextView
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:id="@+id/TEXVIEWCNICFrontStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -50,8 +65,8 @@
 
             <ImageView
                 android:id="@+id/IMG_CNIC_Back"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_gravity="start"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:src="@drawable/ic_menu_camera"
@@ -61,7 +76,7 @@
                 />
             <TextView
                 android:id="@+id/TEXVIEWCNICBackStatus"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -81,10 +96,11 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/LayoutCNIC"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginTop="5dp">
 
         <TextView
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="1dp"
@@ -93,12 +109,14 @@
         <LinearLayout
             android:id="@+id/LayoutdlFrontBack"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_20"
+            >
 
             <ImageView
                 android:id="@+id/IMG_DL_FRONT"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_gravity="start"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:src="@drawable/ic_menu_camera"
@@ -108,7 +126,7 @@
                 />
             <TextView
                 android:id="@+id/TEXVIEWDLFrontStatus"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/front"
@@ -120,8 +138,8 @@
 
             <ImageView
                 android:id="@+id/IMG_DL_BACK"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_gravity="start"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:src="@drawable/ic_menu_camera"
@@ -130,7 +148,7 @@
                 android:onClick="dlBack"
                 />
             <TextView
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:id="@+id/TEXVIEWDLBackStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -146,15 +164,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
         android:orientation="vertical"
         android:layout_below="@id/LayoutDriverLicense">
 
         <TextView
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="1dp"
-            android:text="@string/Upload_reg" />
+            android:text="@string/Upload_reg"
+            android:layout_gravity="center"
+            android:paddingBottom="5dp"
+            />
 
         <LinearLayout
             android:id="@+id/REGSTATUS"
@@ -165,8 +187,8 @@
 
             <ImageView
                 android:id="@+id/IMG_REG"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:src="@drawable/ic_menu_camera"
@@ -177,7 +199,7 @@
             </ImageView>
 
             <TextView
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:id="@+id/TEXVIEWREGStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -192,19 +214,25 @@
 
     <LinearLayout
         android:id="@+id/layout_update"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/LayoutCarReg"
         android:layout_centerHorizontal="true"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginTop="5dp"
+        >
 
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin_20"
+            android:background="@drawable/ripple_effect"
             android:id="@+id/verify_email"
             android:text="@string/verify_email"
             android:onClick="sendEmailVerification"
+            android:textColor="@color/black"
             />
 
     </LinearLayout>
