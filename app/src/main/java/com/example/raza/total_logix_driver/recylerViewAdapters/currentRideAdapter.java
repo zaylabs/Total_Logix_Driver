@@ -957,9 +957,9 @@ public class ViewHolder extends RecyclerView.ViewHolder{
         driveravailablethirdgetlistner.remove();
         driveravailablefourthgetlistner.remove();
         settingsgetlistner.remove();
-
-
     }
+
+
 }
 
 
