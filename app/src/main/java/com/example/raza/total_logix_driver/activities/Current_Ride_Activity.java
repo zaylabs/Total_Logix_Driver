@@ -15,6 +15,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.example.raza.total_logix_driver.DTO.acceptRequest;
 import com.example.raza.total_logix_driver.recylerViewAdapters.currentRideAdapter;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class Current_Ride_Activity extends AppCompatActivity {
     private String driverID;
     private String TAG;
     private FirebaseAuth mAuth;
-
+    private ListenerRegistration currentrideinfolistner;
 
 
     @Override
@@ -53,7 +54,7 @@ public class Current_Ride_Activity extends AppCompatActivity {
 
 
 
-        firestoreDB.collection("acceptRequest").whereEqualTo("driverid", driverID).addSnapshotListener(new EventListener<QuerySnapshot>() {
+       currentrideinfolistner= firestoreDB.collection("acceptRequest").whereEqualTo("driverid", driverID).addSnapshotListener(new EventListener<QuerySnapshot>() {
 
             @Override
             public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
@@ -83,6 +84,13 @@ public class Current_Ride_Activity extends AppCompatActivity {
                 }
             }
         });
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        currentrideinfolistner.remove();
 
     }
 }

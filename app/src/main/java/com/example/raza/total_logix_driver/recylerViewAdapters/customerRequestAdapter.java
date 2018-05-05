@@ -35,6 +35,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
 
 
@@ -77,6 +78,7 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
     private float distance;
     private GeoPoint mCurrentLocation;
     private String mydate, mytime, gatepass;
+    private ListenerRegistration driveravailablegetreqliststner;
 
     public customerRequestAdapter(Context context, List<customerRequest> cRequests) {
         this.cRequests = cRequests;
@@ -126,7 +128,7 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
         gatepass = cRequests.get(position).getGatepass();
         SimpleDateFormat formatter = new SimpleDateFormat("h:mm a", Locale.getDefault());
         final DocumentReference docRef = db.collection("driveravailable").document(userID);
-        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        driveravailablegetreqliststner=docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot,
                                 @Nullable FirebaseFirestoreException e) {
@@ -280,5 +282,12 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
             mRatingBar = (RatingBar) mView.findViewById(R.id.c_rating);
 
         }
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        driveravailablegetreqliststner.remove();
+
     }
 }

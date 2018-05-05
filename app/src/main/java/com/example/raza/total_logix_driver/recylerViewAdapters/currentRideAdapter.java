@@ -46,6 +46,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.ListenerRegistration;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -101,7 +102,7 @@ private float enteredamount;
 private float cashinhandcalculate;
 private float cashinhand;
 
-
+private ListenerRegistration walletgetlistner;
 
     private float drivershare;
     private float logixshare;
@@ -129,6 +130,9 @@ private float cashinhand;
     private float totalearningnewlogixshare;
     private float totalearningnewdride;
     private float totalearningnewfare;
+    private float totalearningmoneyinwallets;
+    private float totalearningmoneyinwalletsnew;
+    private float totalearningmoneyinwalletsold;
 
     //overallcash
 
@@ -172,9 +176,16 @@ private float cashinhand;
     private float totallogixsharepercent;
 
 
-
-
-
+    private ListenerRegistration driveravailablegetlistner;
+    private ListenerRegistration driveravailablesecondgetlistner;
+    private ListenerRegistration drivergetListner;
+    private ListenerRegistration customergetlistener;
+    private ListenerRegistration overallcashgetlistner;
+    private ListenerRegistration totalearninggetlistner;
+    private ListenerRegistration currentcashgetlistner;
+    private ListenerRegistration driveravailablethirdgetlistner;
+    private ListenerRegistration driveravailablefourthgetlistner;
+    private  ListenerRegistration settingsgetlistner;
 
 
     public currentRideAdapter(Context context, List<acceptRequest> dHistory){
@@ -203,7 +214,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
     userID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
 
 
-    db.collection("driveravailable").document(userID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+    driveravailablesecondgetlistner=db.collection("driveravailable").document(userID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
         @Override
         public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                     driverAvailable driverAvailable = documentSnapshot.toObject(com.example.raza.total_logix_driver.DTO.driverAvailable.class);
@@ -217,7 +228,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
 */
     CurrentLocation= DriverLocation;
 
-    db.collection("settings").document("rates").addSnapshotListener(new EventListener<DocumentSnapshot>() {
+   settingsgetlistner= db.collection("settings").document("rates").addSnapshotListener(new EventListener<DocumentSnapshot>() {
         @Override
         public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
             settings settings = documentSnapshot.toObject(settings.class);
@@ -263,8 +274,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
         holder.mReached.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                db.collection("driveravailable").document(userID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                driveravailablefourthgetlistner= db.collection("driveravailable").document(userID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
                     public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                         driverAvailable driverAvailable = documentSnapshot.toObject(com.example.raza.total_logix_driver.DTO.driverAvailable.class);
@@ -361,7 +371,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
             public void onClick(View v) {
 
 
-                db.collection("driveravailable").document(userID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+               driveravailablethirdgetlistner= db.collection("driveravailable").document(userID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
                     public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                         driverAvailable driverAvailable = documentSnapshot.toObject(com.example.raza.total_logix_driver.DTO.driverAvailable.class);
@@ -469,7 +479,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
             public void onClick(View v) {
 
 
-                db.collection("driveravailable").document(userID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                driveravailablegetlistner=db.collection("driveravailable").document(userID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
                     public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                         driverAvailable driverAvailable = documentSnapshot.toObject(com.example.raza.total_logix_driver.DTO.driverAvailable.class);
@@ -504,21 +514,37 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                 Float result = null;
                 Float b;
                 Float a = distance;
-                if (dHistory.get(position).getVT().contains("Riksha")) {
-                    b = (a * RikshaRate) + RikshaBase;
-                    if (dHistory.get(position).getDriverloading().contains("Diver Loading Needed")) {
-                        result = b + DriverLoadingRate;
-                    } else {
-                        result = b;
+                double c = 3.0;
+                if (dHistory.get(position).getVT().contains("Suzuki")) {
+                    if (a<c){
+                        b= Float.valueOf(SuzukiBase);
+                        if (dHistory.get(position).getDriverloading().contains("Diver Loading Needed")) {
+                            result = b + DriverLoadingRate;
+                        } else {
+                            result = b;
+                        }}else {
+                        b = (a * SuzukiRate);
+                        if (dHistory.get(position).getDriverloading().contains("Diver Loading Needed")) {
+                            result = b + DriverLoadingRate;
+                        } else {
+                            result = b;
+                        }
                     }}
-                else if (dHistory.get(position).getVT().contains("Suzuki")) {
-                    b = (a * SuzukiRate) + SuzukiBase;
-                    if (dHistory.get(position).getDriverloading().contains("Diver Loading Needed")) {
-                        result = b + DriverLoadingRate;
-                    } else {
-                        result = b;
-                    }
-                }
+                else if (dHistory.get(position).getVT().contains("Riksha")) {
+                    if (a<c){
+                        b= Float.valueOf(RikshaBase);
+                        if (dHistory.get(position).getDriverloading().contains("Diver Loading Needed")) {
+                            result = b + DriverLoadingRate;
+                        } else {
+                            result = b;
+                        }}else {
+                        b = (a * RikshaRate);
+                        if (dHistory.get(position).getDriverloading().contains("Diver Loading Needed")) {
+                            result = b + DriverLoadingRate;
+                        } else {
+                            result = b;
+                        }
+                    }}
 
                 final float results = result;
 
@@ -625,7 +651,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                 Button mPay = (Button) myDialog.findViewById(R.id.btn_pay);
                 final RatingBar mRatingbar=(RatingBar)myDialog.findViewById(R.id.payCustomerRating);
                 mTotalFare.setText(RsFormat.format(totalfarepaymentfloat));
-                db.collection("wallet").document(dHistory.get(position).getCID()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                walletgetlistner=db.collection("wallet").document(dHistory.get(position).getCID()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
                     public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                         wallet wallet = documentSnapshot.toObject(wallet.class);
@@ -719,7 +745,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                         );
 
 
-                        db.collection("currentCash").document(userID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                        currentcashgetlistner=db.collection("currentCash").document(userID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
                             @Override
                             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                                 currentCash currentCash = documentSnapshot.toObject(currentCash.class);
@@ -740,31 +766,9 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                         currentCash currentCash = new currentCash(currentcashnowcash, currentcashnowfare, currentcashnowdrivershare, currentcashnowlogix, currentcashnowride, nowdate);
                         db.collection("currentCash").document(userID).set(currentCash);
 
-                        //totalearning
-
-
-                        db.collection("totalearning").document("admin").addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                            @Override
-                            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                                totalearning totalearning = documentSnapshot.toObject(totalearning.class);
-                                totalearningoldfare = totalearning.getTotalearning();
-                                totalearningoldlogixshare = totalearning.getTotallogixearning();
-                                totalearningoldride = totalearning.getTotalrides();
-
-                            }
-                        });
-
-                        totalearningnewfare = totalearningoldfare + totalfarepaymentfloat;
-                        totalearningnewlogixshare = totalearningoldlogixshare + logixshare;
-                        totalearningnewdride = totalearningoldride + 1;
-                        totalearning totalearning = new totalearning(totalearningnewfare, totalearningnewdride, totalearningnewlogixshare, nowdate);
-
-                        db.collection("totalearning").document("admin").set(totalearning);
-
-
 //overallcash
 
-                        db.collection("overallcash").document(userID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                       overallcashgetlistner=db.collection("overallcash").document(userID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
                             @Override
                             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                                 overallcash overallcash = documentSnapshot.toObject(com.example.raza.total_logix_driver.DTO.overallcash.class);
@@ -789,7 +793,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
 
                         //CustomerStars and Ride
 
-                        db.collection("customers").document(dHistory.get(position).getCID()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                        customergetlistener=db.collection("customers").document(dHistory.get(position).getCID()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
                             @Override
                             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                                 userProfile userProfile = documentSnapshot.toObject(com.example.raza.total_logix_driver.DTO.userProfile.class);
@@ -813,7 +817,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
 
                         //Driver Stars and Ride
 
-                        db.collection("drivers").document(userID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                       drivergetListner= db.collection("drivers").document(userID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
                             @Override
                             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                                 userProfile userProfile=documentSnapshot.toObject(com.example.raza.total_logix_driver.DTO.userProfile.class);
@@ -845,6 +849,32 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                         //wallet
                         wallet wallet = new wallet(walletafterpaid,nowdate);
                         db.collection("wallet").document(dHistory.get(position).getCID()).set(wallet);
+
+
+                        //totalearning
+
+
+                        totalearninggetlistner= db.collection("totalearning").document("admin").addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                            @Override
+                            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                                totalearning totalearning = documentSnapshot.toObject(totalearning.class);
+                                totalearningoldfare = totalearning.getTotalearning();
+                                totalearningoldlogixshare = totalearning.getTotallogixearning();
+                                totalearningoldride = totalearning.getTotalrides();
+                                totalearningmoneyinwalletsold=totalearning.getMoneyinwallets();
+
+                            }
+                        });
+
+                        totalearningnewfare = totalearningoldfare + totalfarepaymentfloat;
+                        totalearningnewlogixshare = totalearningoldlogixshare + logixshare;
+                        totalearningnewdride = totalearningoldride + 1;
+                        totalearningmoneyinwalletsnew=totalearningmoneyinwalletsold+enteredamount;
+                        totalearningmoneyinwallets= totalearningmoneyinwalletsnew-totalfarepaymentfloat;
+                        totalearning totalearning = new totalearning(totalearningnewfare, totalearningnewdride, totalearningnewlogixshare,totalearningmoneyinwallets, nowdate);
+
+                        db.collection("totalearning").document("admin").set(totalearning);
+
 
                         //historyupdate
 
@@ -913,7 +943,23 @@ public class ViewHolder extends RecyclerView.ViewHolder{
     }
 }
 
+    @Override
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        walletgetlistner.remove();
+        driveravailablegetlistner.remove();
+        drivergetListner.remove();
+        customergetlistener.remove();
+        overallcashgetlistner.remove();
+        totalearninggetlistner.remove();
+        currentcashgetlistner.remove();
+        driveravailablesecondgetlistner.remove();
+        driveravailablethirdgetlistner.remove();
+        driveravailablefourthgetlistner.remove();
+        settingsgetlistner.remove();
 
+
+    }
 }
 
 

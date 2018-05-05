@@ -30,6 +30,7 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -118,7 +119,10 @@ public class profileFragment extends android.app.Fragment implements View.OnClic
 
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        /*Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);*/
         }
     }
 
@@ -145,7 +149,7 @@ public class profileFragment extends android.app.Fragment implements View.OnClic
         byte[] data = baos.toByteArray();
 
         UploadTask uploadTask = mImageRef.child("DP").putBytes(data);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
+         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 // Handle unsuccessful uploads
@@ -193,7 +197,7 @@ public class profileFragment extends android.app.Fragment implements View.OnClic
 
         DocumentReference docRef = db.collection("drivers").document(userID);
 
-        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 driverProfile profile = documentSnapshot.toObject(driverProfile.class);
@@ -278,4 +282,8 @@ public class profileFragment extends android.app.Fragment implements View.OnClic
         mAuth.signOut();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 }

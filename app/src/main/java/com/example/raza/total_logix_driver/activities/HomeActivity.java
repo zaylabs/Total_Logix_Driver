@@ -45,6 +45,7 @@ import com.example.raza.total_logix_driver.DTO.driverAvailable;
 import com.example.raza.total_logix_driver.DTO.driverProfile;
 import com.example.raza.total_logix_driver.R;
 import com.example.raza.total_logix_driver.fragment.DriverHistoryFragment;
+import com.example.raza.total_logix_driver.fragment.helpFragment;
 import com.example.raza.total_logix_driver.fragment.paymentHistoryFragment;
 import com.example.raza.total_logix_driver.fragment.profileFragment;
 import com.example.raza.total_logix_driver.fragment.transactionhistoryFragment;
@@ -83,6 +84,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
@@ -233,7 +235,8 @@ public class HomeActivity extends BaseActivity
     private String user_id;
     private String TAG = "";
     private TextView mCash,mLogix,mEarned,mTotalFare;
-
+    private ListenerRegistration CurrentCashDasboardListner;
+    private ListenerRegistration customerrequestlistner;
     private NumberFormat RsFormat = new DecimalFormat("'Rs.'#");
     private NumberFormat logixformat=new DecimalFormat("#");
     @Override
@@ -301,7 +304,7 @@ public class HomeActivity extends BaseActivity
         createLocationRequest();
         buildLocationSettingsRequest();
 
-        firestoreDB.collection("currentCash").document(userID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        CurrentCashDasboardListner=firestoreDB.collection("currentCash").document(userID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                     currentCash currentCash = documentSnapshot.toObject(com.example.raza.total_logix_driver.DTO.currentCash.class);
@@ -376,7 +379,7 @@ public class HomeActivity extends BaseActivity
 
     public void viewJobList() {
 
-        firestoreDB.collection("customerRequest").whereEqualTo("vt", mVahicleType).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        customerrequestlistner=firestoreDB.collection("customerRequest").whereEqualTo("vt", mVahicleType).addSnapshotListener(new EventListener<QuerySnapshot>() {
 
             @Override
             public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
@@ -400,6 +403,7 @@ public class HomeActivity extends BaseActivity
                         case REMOVED:
                             cRequests.remove(request);
                             customerRequestAdapter.notifyDataSetChanged();
+
                             break;
                     }
 
@@ -450,8 +454,9 @@ public class HomeActivity extends BaseActivity
     private void disconnectDriver() {
         Toast.makeText(HomeActivity.this, "Driver Not Available", Toast.LENGTH_SHORT).show();
         mOnline.setText(R.string.driverOffline);
-
-
+        if(mWorkingSwitch.isChecked()) {
+            customerrequestlistner.remove();
+        }
         firestoreDB.collection("driveravailable").document(userID)
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -548,6 +553,7 @@ public class HomeActivity extends BaseActivity
 
         switch (item.getItemId()) {
             case R.id.home:
+                mAuth.addAuthStateListener(firebaseAuthListener);
 
                 if (!sMapFragment.isAdded()){
                     sFm.beginTransaction().add(R.id.map, sMapFragment).commit();
@@ -593,10 +599,14 @@ public class HomeActivity extends BaseActivity
                 break;
 
             case R.id.help:
+                hideFooter();
+                ft.replace(R.id.cm, new helpFragment());
+                ft.commit();
 
                 break;
 
             case R.id.logout:
+                CurrentCashDasboardListner.remove();
                 mAuth.signOut();
                 break;
 
@@ -636,6 +646,7 @@ public class HomeActivity extends BaseActivity
     public void onStop() {
         super.onStop();
         mAuth.removeAuthStateListener(firebaseAuthListener);
+
     }
 
     @Override
@@ -643,8 +654,9 @@ public class HomeActivity extends BaseActivity
         super.onDestroy();
         stopLocationUpdates();
         disconnectDriver();
-        mAuth.removeAuthStateListener(firebaseAuthListener);
+        CurrentCashDasboardListner.remove();
 
+        mAuth.removeAuthStateListener(firebaseAuthListener);
     }
 
     @Override
@@ -653,6 +665,7 @@ public class HomeActivity extends BaseActivity
         enableMyLocation();
         setOnMyLocationButtonClick();
         setOnMyLocationClick();
+
 
 
     }
@@ -972,6 +985,7 @@ public class HomeActivity extends BaseActivity
     @Override
     public void onResume() {
         super.onResume();
+/*
         // Within {@code onPause()}, we remove location updates. Here, we resume receiving
         // location updates if the user has requested them.
         if (mRequestingLocationUpdates && checkPermissions()) {
@@ -984,6 +998,7 @@ public class HomeActivity extends BaseActivity
             requestPermissions();
         }
 
+*/
 
     }
 
