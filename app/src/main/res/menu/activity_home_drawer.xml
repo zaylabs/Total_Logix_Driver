@@ -8,6 +8,11 @@
             android:id="@+id/home"
             android:icon="@mipmap/ic_home_black_24dp"
             android:title="@string/menu_home" />
+        <item
+            android:id="@+id/current_ride"
+            android:icon="@drawable/ic_star_black_24dp"
+            android:title="@string/current_logix" />
+
 
         <item
             android:id="@+id/completed_rides"

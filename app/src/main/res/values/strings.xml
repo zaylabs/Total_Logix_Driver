@@ -143,6 +143,7 @@
     <string name="total_fare">Total Fare</string>
     <string name="driver_earning">Driver Earning</string>
     <string name="total_logix_share">Total Logix Share</string>
+    <string name="current_logix">Current Logix</string>
 
 
 </resources>

@@ -881,6 +881,22 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                         db.collection("acceptRequest").document(dHistory.get(position).getUniqueID()).set(acceptRequest);
                         db.collection("CustomerHistory").document(dHistory.get(position).getUniqueID()).set(driverHistory);
                         db.collection("DriverHistory").document(dHistory.get(position).getUniqueID()).set(driverHistory);
+                        db.collection("OnRide").document(dHistory.get(position).getDriverid()).delete()
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+
+                                    }
+
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error deleting document", e);
+                                    }
+                                });
 
                         db.collection("acceptRequest").document(dHistory.get(position).getUniqueID()).delete()
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {

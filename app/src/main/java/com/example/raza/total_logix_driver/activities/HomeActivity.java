@@ -45,6 +45,7 @@ import com.example.raza.total_logix_driver.DTO.driverAvailable;
 import com.example.raza.total_logix_driver.DTO.driverProfile;
 import com.example.raza.total_logix_driver.R;
 import com.example.raza.total_logix_driver.fragment.DriverHistoryFragment;
+import com.example.raza.total_logix_driver.fragment.currentRideFragment;
 import com.example.raza.total_logix_driver.fragment.helpFragment;
 import com.example.raza.total_logix_driver.fragment.paymentHistoryFragment;
 import com.example.raza.total_logix_driver.fragment.profileFragment;
@@ -404,6 +405,14 @@ public class HomeActivity extends BaseActivity
                             cRequests.remove(request);
                             customerRequestAdapter.notifyDataSetChanged();
 
+                            FragmentTransaction ft = getFragmentManager().beginTransaction();
+                            mFooter.setVisibility(GONE);
+
+
+                            ft.replace(R.id.cm, new currentRideFragment());
+                            ft.commit();
+
+
                             break;
                     }
 
@@ -569,7 +578,11 @@ public class HomeActivity extends BaseActivity
                 }
                 mFooter.setVisibility(View.VISIBLE);
                 break;
-
+            case R.id.current_ride:
+                hideFooter();
+                ft.replace(R.id.cm, new currentRideFragment());
+                ft.commit();
+                break;
             case R.id.completed_rides:
                 hideFooter();
                 ft.replace(R.id.cm, new DriverHistoryFragment());

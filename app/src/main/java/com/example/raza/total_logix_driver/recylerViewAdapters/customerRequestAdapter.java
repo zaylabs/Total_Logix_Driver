@@ -20,6 +20,7 @@ import com.example.raza.total_logix_driver.DTO.acceptRequest;
 import com.example.raza.total_logix_driver.DTO.customerRequest;
 import com.example.raza.total_logix_driver.DTO.driverAvailable;
 import com.example.raza.total_logix_driver.DTO.driverHistory;
+import com.example.raza.total_logix_driver.DTO.driverOnRide;
 import com.example.raza.total_logix_driver.R;
 import com.example.raza.total_logix_driver.activities.Current_Ride_Activity;
 import com.example.raza.total_logix_driver.activities.HomeActivity;
@@ -79,6 +80,7 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
     private GeoPoint mCurrentLocation;
     private String mydate, mytime, gatepass;
     private ListenerRegistration driveravailablegetreqliststner;
+    private ListenerRegistration driveronridelistner;
 
     public customerRequestAdapter(Context context, List<customerRequest> cRequests) {
         this.cRequests = cRequests;
@@ -197,47 +199,64 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
                 Toast.makeText(context, "Accept Button", Toast.LENGTH_SHORT).show();
 
 
-                DocumentReference docRef = db.collection("customerRequest").document(cRequests.get(position).userId);
-                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                driveronridelistner = db.collection("OnRide").document(userID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document != null && document.exists()) {
+                    public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
 
-                                driverHistory driverHistory = new driverHistory(cRequests.get(position).getName(), cRequests.get(position).getPickup(), cRequests.get(position).getDrop(), null, null, cRequests.get(position).getPhone(), cRequests.get(position).getDate(), cRequests.get(position).getCID(), cRequests.get(position).getVT(), cRequests.get(position).getWeight(), cRequests.get(position).getBoxes(), cRequests.get(position).getDescription(), cRequests.get(position).getDriverloading(), cRequests.get(position).getRidedistance(), cRequests.get(position).getPickupaddress(), cRequests.get(position).getDropaddress(), cRequests.get(position).getEstFare(), drivername, driverdp, drivernic, driverphone, driverLocation, carregno, userID, "Pending", 0, null, null, 0, uniqueID, "Pending", ridestars, cRequests.get(position).getRidedistance(), gatepass,cRequests.get(position).getArriveddate());
-                                acceptRequest acceptRequest = new acceptRequest(cRequests.get(position).getName(), cRequests.get(position).getPickup(), cRequests.get(position).getDrop(), null, null, cRequests.get(position).getPhone(), cRequests.get(position).getDate(), cRequests.get(position).getCID(), cRequests.get(position).getVT(), cRequests.get(position).getWeight(), cRequests.get(position).getBoxes(), cRequests.get(position).getDescription(), cRequests.get(position).getDriverloading(), cRequests.get(position).getRidedistance(), cRequests.get(position).getPickupaddress(), cRequests.get(position).getDropaddress(), cRequests.get(position).getEstFare(), drivername, driverdp, drivernic, driverphone, driverLocation, carregno, userID, "Pending", 0, null, null, date, 0, uniqueID, "Pending", ridestars, cRequests.get(position).getRidedistance(), gatepass,cRequests.get(position).getArriveddate());
-                                db.collection("acceptRequest").document(uniqueID).set(acceptRequest);
-                                db.collection("CustomerHistory").document(uniqueID).set(driverHistory);
-                                db.collection("DriverHistory").document(uniqueID).set(driverHistory);
-                                db.collection("customerRequest").document(uniqueID).delete()
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                                                Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                                                Intent intent = new Intent(context, Current_Ride_Activity.class);
-                                                context.startActivity(intent);
-                                            }
-
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Log.w(TAG, "Error deleting document", e);
-                                            }
-                                        });
-                            } else {
-                                Toast.makeText(context, "Ride Already Booked", Toast.LENGTH_SHORT).show();
-                            }
+                        if (documentSnapshot.exists()) {
+                            // do something with the data
+                            Toast.makeText(context, "Kindly Complete your Current Logix", Toast.LENGTH_SHORT).show();
                         } else {
-                            Log.d(TAG, "get failed with ", task.getException());
+
+                            DocumentReference docRef = db.collection("customerRequest").document(cRequests.get(position).userId);
+                            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        DocumentSnapshot document = task.getResult();
+                                        if (document != null && document.exists()) {
+
+                                            driverHistory driverHistory = new driverHistory(cRequests.get(position).getName(), cRequests.get(position).getPickup(), cRequests.get(position).getDrop(), null, null, cRequests.get(position).getPhone(), cRequests.get(position).getDate(), cRequests.get(position).getCID(), cRequests.get(position).getVT(), cRequests.get(position).getWeight(), cRequests.get(position).getBoxes(), cRequests.get(position).getDescription(), cRequests.get(position).getDriverloading(), cRequests.get(position).getRidedistance(), cRequests.get(position).getPickupaddress(), cRequests.get(position).getDropaddress(), cRequests.get(position).getEstFare(), drivername, driverdp, drivernic, driverphone, driverLocation, carregno, userID, "Pending", 0, null, null, 0, uniqueID, "Pending", ridestars, cRequests.get(position).getRidedistance(), gatepass, cRequests.get(position).getArriveddate());
+                                            acceptRequest acceptRequest = new acceptRequest(cRequests.get(position).getName(), cRequests.get(position).getPickup(), cRequests.get(position).getDrop(), null, null, cRequests.get(position).getPhone(), cRequests.get(position).getDate(), cRequests.get(position).getCID(), cRequests.get(position).getVT(), cRequests.get(position).getWeight(), cRequests.get(position).getBoxes(), cRequests.get(position).getDescription(), cRequests.get(position).getDriverloading(), cRequests.get(position).getRidedistance(), cRequests.get(position).getPickupaddress(), cRequests.get(position).getDropaddress(), cRequests.get(position).getEstFare(), drivername, driverdp, drivernic, driverphone, driverLocation, carregno, userID, "Pending", 0, null, null, date, 0, uniqueID, "Pending", ridestars, cRequests.get(position).getRidedistance(), gatepass, cRequests.get(position).getArriveddate());
+                                            driverOnRide driverOnRide = new driverOnRide(userID);
+                                            db.collection("acceptRequest").document(uniqueID).set(acceptRequest);
+                                            db.collection("CustomerHistory").document(uniqueID).set(driverHistory);
+                                            db.collection("DriverHistory").document(uniqueID).set(driverHistory);
+                                            db.collection("OnRide").document(userID).set(driverOnRide);
+                                            db.collection("customerRequest").document(uniqueID).delete()
+                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void aVoid) {
+                                                            Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                                                            Log.d(TAG, "DocumentSnapshot successfully deleted!");
+
+                                                        }
+
+                                                    })
+                                                    .addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            Log.w(TAG, "Error deleting document", e);
+                                                        }
+                                                    });
+                                        } else {
+                                            Toast.makeText(context, "Ride Already Booked", Toast.LENGTH_SHORT).show();
+                                        }
+                                    } else {
+                                        Log.d(TAG, "get failed with ", task.getException());
+                                    }
+
+                                }
+                            });
+
+
                         }
 
+
                     }
+
+
                 });
-
-
             }
         });
         holder.mView.setOnClickListener(new View.OnClickListener() {
