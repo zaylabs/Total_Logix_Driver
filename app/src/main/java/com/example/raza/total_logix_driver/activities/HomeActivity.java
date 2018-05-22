@@ -405,14 +405,14 @@ public class HomeActivity extends BaseActivity
                             cRequests.remove(request);
                             customerRequestAdapter.notifyDataSetChanged();
 
-                            FragmentTransaction ft = getFragmentManager().beginTransaction();
+                  /*          FragmentTransaction ft = getFragmentManager().beginTransaction();
                             mFooter.setVisibility(GONE);
 
 
                             ft.replace(R.id.cm, new currentRideFragment());
                             ft.commit();
 
-
+*/
                             break;
                     }
 

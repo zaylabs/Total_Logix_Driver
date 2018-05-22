@@ -325,7 +325,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                         null,
                         null,
                         0,
-                        dHistory.get(position).getUniqueID(),dHistory.get(position).getSettlement(),dHistory.get(position).getRidestars(),dHistory.get(position).getEstDistance(),dHistory.get(position).getGatepass(),arriveddate);
+                        dHistory.get(position).getUniqueID(),dHistory.get(position).getSettlement(),dHistory.get(position).getRidestars(),dHistory.get(position).getRidestars(),dHistory.get(position).getEstDistance(),dHistory.get(position).getGatepass(),arriveddate,dHistory.get(position).getDroplocationUniqueID());
                 acceptRequest acceptRequest = new acceptRequest(
                         dHistory.get(position).getName(),
                         dHistory.get(position).getOriginalpickup(),
@@ -357,7 +357,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                         null,
                         date,
                         0,
-                        dHistory.get(position).getUniqueID(),dHistory.get(position).getSettlement(),dHistory.get(position).getRidestars(),dHistory.get(position).getEstDistance(),dHistory.get(position).getGatepass(),arriveddate
+                        dHistory.get(position).getUniqueID(),dHistory.get(position).getSettlement(),dHistory.get(position).getRidestars(),dHistory.get(position).getEstDistance(),dHistory.get(position).getGatepass(),arriveddate,dHistory.get(position).getDroplocationUniqueID()
                 );
                 db.collection("acceptRequest").document(dHistory.get(position).getUniqueID()).set(acceptRequest);
                 db.collection("CustomerHistory").document(dHistory.get(position).getUniqueID()).set(driverHistory);
@@ -432,7 +432,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                         null,
                         null,
                         minutes,
-                        dHistory.get(position).getUniqueID(),dHistory.get(position).getSettlement(),dHistory.get(position).getRidestars(),dHistory.get(position).getEstDistance(),dHistory.get(position).getGatepass(),dHistory.get(position).getArriveddate());
+                        dHistory.get(position).getUniqueID(),dHistory.get(position).getSettlement(),dHistory.get(position).getRidestars(),dHistory.get(position).getRidestars(),dHistory.get(position).getEstDistance(),dHistory.get(position).getGatepass(),dHistory.get(position).getArriveddate(),dHistory.get(position).getDroplocationUniqueID());
                 acceptRequest acceptRequest = new acceptRequest(
                         dHistory.get(position).getName(),
                         dHistory.get(position).getOriginalpickup(),
@@ -464,7 +464,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                         null,
                         dHistory.get(position).getStatusdate(),
                         minutes,
-                        dHistory.get(position).getUniqueID(),dHistory.get(position).getSettlement(),dHistory.get(position).getRidestars(),dHistory.get(position).getEstDistance(),dHistory.get(position).getGatepass(),dHistory.get(position).getArriveddate()
+                        dHistory.get(position).getUniqueID(),dHistory.get(position).getSettlement(),dHistory.get(position).getRidestars(),dHistory.get(position).getEstDistance(),dHistory.get(position).getGatepass(),dHistory.get(position).getArriveddate(),dHistory.get(position).getDroplocationUniqueID()
                 );
 
                 db.collection("acceptRequest").document(dHistory.get(position).getUniqueID()).set(acceptRequest);
@@ -578,7 +578,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                                         null,
                                         Status,
                                         dHistory.get(position).getWaitingtime(),
-                                        dHistory.get(position).getUniqueID(),dHistory.get(position).getSettlement(),dHistory.get(position).getRidestars(),dHistory.get(position).getEstDistance(),dHistory.get(position).getGatepass(),dHistory.get(position).getArriveddate());
+                                        dHistory.get(position).getUniqueID(),dHistory.get(position).getSettlement(),dHistory.get(position).getRidestars(),dHistory.get(position).getRidestars(),dHistory.get(position).getEstDistance(),dHistory.get(position).getGatepass(),dHistory.get(position).getArriveddate(),dHistory.get(position).getDroplocationUniqueID());
                                 acceptRequest acceptRequest = new acceptRequest(
                                         dHistory.get(position).getName(),
                                         dHistory.get(position).getOriginalpickup(),
@@ -610,7 +610,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                                         Status,
                                         dHistory.get(position).getStatusdate(),
                                         dHistory.get(position).getWaitingtime(),
-                                        dHistory.get(position).getUniqueID(),dHistory.get(position).getSettlement(),dHistory.get(position).getRidestars(),dHistory.get(position).getEstDistance(),dHistory.get(position).getGatepass(),dHistory.get(position).getArriveddate()
+                                        dHistory.get(position).getUniqueID(),dHistory.get(position).getSettlement(),dHistory.get(position).getRidestars(),dHistory.get(position).getEstDistance(),dHistory.get(position).getGatepass(),dHistory.get(position).getArriveddate(),dHistory.get(position).getDroplocationUniqueID()
                                 );
                                 db.collection("acceptRequest").document(dHistory.get(position).getUniqueID()).set(acceptRequest);
                                 db.collection("CustomerHistory").document(dHistory.get(position).getUniqueID()).set(driverHistory);
@@ -709,7 +709,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                                 PaidVia,
                                 PaymentStatus,
                                 dHistory.get(position).getWaitingtime(),
-                                dHistory.get(position).getUniqueID(), dHistory.get(position).getSettlement(), customerdriverriderating, dHistory.get(position).getEstDistance(), dHistory.get(position).getGatepass(),dHistory.get(position).getArriveddate());
+                                dHistory.get(position).getUniqueID(), dHistory.get(position).getSettlement(),dHistory.get(position).getRidestars(), customerdriverriderating, dHistory.get(position).getEstDistance(), dHistory.get(position).getGatepass(),dHistory.get(position).getArriveddate(),dHistory.get(position).getDroplocationUniqueID());
                         acceptRequest acceptRequest = new acceptRequest(
                                 dHistory.get(position).getName(),
                                 dHistory.get(position).getOriginalpickup(),
@@ -741,7 +741,7 @@ public void onBindViewHolder(@NonNull final currentRideAdapter.ViewHolder holder
                                 PaymentStatus,
                                 dHistory.get(position).getStatusdate(),
                                 dHistory.get(position).getWaitingtime(),
-                                dHistory.get(position).getUniqueID(), dHistory.get(position).getSettlement(), customerdriverriderating, dHistory.get(position).getEstDistance(), dHistory.get(position).getGatepass(),dHistory.get(position).getArriveddate()
+                                dHistory.get(position).getUniqueID(), dHistory.get(position).getSettlement(), customerdriverriderating, dHistory.get(position).getEstDistance(), dHistory.get(position).getGatepass(),dHistory.get(position).getArriveddate(),dHistory.get(position).getDroplocationUniqueID()
                         );
 
 

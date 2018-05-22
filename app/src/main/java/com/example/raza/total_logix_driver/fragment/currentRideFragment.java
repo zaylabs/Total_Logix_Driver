@@ -1,6 +1,7 @@
 package com.example.raza.total_logix_driver.fragment;
 
 
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -90,6 +91,11 @@ public class currentRideFragment extends android.app.Fragment {
                         case REMOVED:
                             dHistory.remove(acceptRequest);
                             currentRideAdapter.notifyDataSetChanged();
+                            FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+                            ft.replace(R.id.cm, new DriverHistoryFragment());
+                            ft.commit();
+
                             break;
                     }
 

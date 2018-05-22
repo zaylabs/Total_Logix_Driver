@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.icu.text.TimeZoneFormat;
 import android.location.Location;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -29,6 +30,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -102,6 +104,13 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
         mAuth = FirebaseAuth.getInstance();
 
         userID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            driverdp = user.getPhotoUrl().toString();
+
+       }
+
+
 
 
         /*docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -122,7 +131,6 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
         mPick = cRequests.get(position).getPickup();
         /* mCurrentLocation= ((HomeActivity) context).;*/
         drivername = ((HomeActivity) context).driverName;
-        driverdp = ((HomeActivity) context).driverdp;
         drivernic = ((HomeActivity) context).drivernic;
         driverphone = ((HomeActivity) context).driverphone;
         carregno = ((HomeActivity) context).carregno;
@@ -161,6 +169,7 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
                 }
             }
         });
+
 
 
         mydate = DateFormat.getDateInstance().format(cRequests.get(position).getDate());
@@ -216,8 +225,8 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
                                         DocumentSnapshot document = task.getResult();
                                         if (document != null && document.exists()) {
 
-                                            driverHistory driverHistory = new driverHistory(cRequests.get(position).getName(), cRequests.get(position).getPickup(), cRequests.get(position).getDrop(), null, null, cRequests.get(position).getPhone(), cRequests.get(position).getDate(), cRequests.get(position).getCID(), cRequests.get(position).getVT(), cRequests.get(position).getWeight(), cRequests.get(position).getBoxes(), cRequests.get(position).getDescription(), cRequests.get(position).getDriverloading(), cRequests.get(position).getRidedistance(), cRequests.get(position).getPickupaddress(), cRequests.get(position).getDropaddress(), cRequests.get(position).getEstFare(), drivername, driverdp, drivernic, driverphone, driverLocation, carregno, userID, "Pending", 0, null, null, 0, uniqueID, "Pending", ridestars, cRequests.get(position).getRidedistance(), gatepass, cRequests.get(position).getArriveddate());
-                                            acceptRequest acceptRequest = new acceptRequest(cRequests.get(position).getName(), cRequests.get(position).getPickup(), cRequests.get(position).getDrop(), null, null, cRequests.get(position).getPhone(), cRequests.get(position).getDate(), cRequests.get(position).getCID(), cRequests.get(position).getVT(), cRequests.get(position).getWeight(), cRequests.get(position).getBoxes(), cRequests.get(position).getDescription(), cRequests.get(position).getDriverloading(), cRequests.get(position).getRidedistance(), cRequests.get(position).getPickupaddress(), cRequests.get(position).getDropaddress(), cRequests.get(position).getEstFare(), drivername, driverdp, drivernic, driverphone, driverLocation, carregno, userID, "Pending", 0, null, null, date, 0, uniqueID, "Pending", ridestars, cRequests.get(position).getRidedistance(), gatepass, cRequests.get(position).getArriveddate());
+                                            driverHistory driverHistory = new driverHistory(cRequests.get(position).getName(), cRequests.get(position).getPickup(), cRequests.get(position).getDrop(), null, null, cRequests.get(position).getPhone(), cRequests.get(position).getDate(), cRequests.get(position).getCID(), cRequests.get(position).getVT(), cRequests.get(position).getWeight(), cRequests.get(position).getBoxes(), cRequests.get(position).getDescription(), cRequests.get(position).getDriverloading(), cRequests.get(position).getRidedistance(), cRequests.get(position).getPickupaddress(), cRequests.get(position).getDropaddress(), cRequests.get(position).getEstFare(), drivername, driverdp, drivernic, driverphone, driverLocation, carregno, userID, "Pending", 0, null, null, 0, uniqueID, "Pending", ridestars,ridestars, cRequests.get(position).getRidedistance(), gatepass, cRequests.get(position).getArriveddate(),cRequests.get(position).getDroplocationUniqueID());
+                                            acceptRequest acceptRequest = new acceptRequest(cRequests.get(position).getName(), cRequests.get(position).getPickup(), cRequests.get(position).getDrop(), null, null, cRequests.get(position).getPhone(), cRequests.get(position).getDate(), cRequests.get(position).getCID(), cRequests.get(position).getVT(), cRequests.get(position).getWeight(), cRequests.get(position).getBoxes(), cRequests.get(position).getDescription(), cRequests.get(position).getDriverloading(), cRequests.get(position).getRidedistance(), cRequests.get(position).getPickupaddress(), cRequests.get(position).getDropaddress(), cRequests.get(position).getEstFare(), drivername, driverdp, drivernic, driverphone, driverLocation, carregno, userID, "Pending", 0, null, null, date, 0, uniqueID, "Pending", ridestars, cRequests.get(position).getRidedistance(), gatepass, cRequests.get(position).getArriveddate(),cRequests.get(position).getDroplocationUniqueID());
                                             driverOnRide driverOnRide = new driverOnRide(userID);
                                             db.collection("acceptRequest").document(uniqueID).set(acceptRequest);
                                             db.collection("CustomerHistory").document(uniqueID).set(driverHistory);

@@ -531,8 +531,36 @@
 
             >
 
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Your Rating"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:id="@+id/YourRatingTv"
+                android:layout_centerHorizontal="true"
+                />
             <RatingBar
-                android:id="@+id/rideratingbar"
+                android:id="@+id/driverrideratingbar"
+                android:layout_below="@+id/YourRatingTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:layout_gravity="center"
+                android:clickable="false"
+                android:isIndicator="true"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Customer Rating"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:id="@+id/CustomerRatingTv"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/driverrideratingbar"
+                />
+            <RatingBar
+                android:id="@+id/customerrideratingbar"
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -540,6 +568,7 @@
                 android:layout_gravity="center"
                 android:clickable="false"
                 android:isIndicator="true"
+                android:layout_below="@id/CustomerRatingTv"
                 />
 
         </RelativeLayout>

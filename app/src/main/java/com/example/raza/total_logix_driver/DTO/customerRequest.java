@@ -26,11 +26,12 @@ public class customerRequest extends Userid {
     private float stars;
     private String gatepass;
     private Date arriveddate;
+    private String droplocationUniqueID;
     customerRequest(){
 
     }
 
-    public customerRequest(String name, GeoPoint pickup, GeoPoint drop, String phone, Date date, String CID, String VT, String weight, String boxes , String description, String driverloading, float ridedistance, String pickupaddress, String dropaddress, String estFare, String uniqueID,float stars, String gatepass, Date arriveddate){
+    public customerRequest(String name, GeoPoint pickup, GeoPoint drop, String phone, Date date, String CID, String VT, String weight, String boxes , String description, String driverloading, float ridedistance, String pickupaddress, String dropaddress, String estFare, String uniqueID,float stars, String gatepass, Date arriveddate,String droplocationUniqueID){
 
         this.name = name;
         this.pickup = pickup;
@@ -51,6 +52,7 @@ public class customerRequest extends Userid {
         this.stars=stars;
         this.gatepass=gatepass;
         this.arriveddate = arriveddate;
+        this.droplocationUniqueID = droplocationUniqueID;
     }
 
     public String getName() {
@@ -203,6 +205,14 @@ public class customerRequest extends Userid {
 
     public void setArriveddate(Date arriveddate) {
         this.arriveddate = arriveddate;
+    }
+
+    public String getDroplocationUniqueID() {
+        return droplocationUniqueID;
+    }
+
+    public void setDroplocationUniqueID(String droplocationUniqueID) {
+        this.droplocationUniqueID = droplocationUniqueID;
     }
 }
 
