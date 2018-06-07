@@ -50,7 +50,7 @@
                 android:id="@+id/totalfarepayment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/sample_fare"
+                android:text="@string/rupees_Zero"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
         </LinearLayout>
         <LinearLayout
@@ -75,9 +75,10 @@
 
                         <TextView
                             android:id="@+id/walletbalancepayment"
-                            android:text="@string/sample_fare"
+                            android:text="@string/rupees_Zero"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                             />
         </LinearLayout>
@@ -104,7 +105,7 @@
 
                         <TextView
                             android:id="@+id/remainingpayment"
-                            android:text="@string/sample_fare"
+                            android:text="@string/rupees_Zero"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
@@ -117,7 +118,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/linear_child3"
             android:orientation="horizontal"
-            android:gravity="center"
+            android:gravity="center_horizontal"
             android:paddingBottom="@dimen/margin_10"
             >
 
@@ -128,12 +129,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                android:paddingEnd="150dp"
-                />
+                android:paddingEnd="100dp" />
 
             <TextView
                 android:id="@+id/waitfine"
-                android:text="0"
+                android:text="@string/rupees_Zero"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
@@ -161,8 +161,8 @@
 
                         <EditText
                             android:id="@+id/addtowalletEditPayment"
-                            android:hint="@string/sample_fare"
-                            android:text="@string/zero"
+
+                            android:text="@string/rupees_Zero"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"

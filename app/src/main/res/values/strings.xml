@@ -144,6 +144,7 @@
     <string name="driver_earning">Driver Earning</string>
     <string name="total_logix_share">Total Logix Share</string>
     <string name="current_logix">Current Logix</string>
+    <string name="rupees_Zero">Rs.0</string>
 
 
 </resources>

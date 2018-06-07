@@ -39,6 +39,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 
@@ -106,10 +107,11 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
         userID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            driverdp = user.getPhotoUrl().toString();
+            if (user.getPhotoUrl() != null) {
+                driverdp = user.getPhotoUrl().toString();
 
-       }
-
+            }
+        }
 
 
 
@@ -232,6 +234,38 @@ public class customerRequestAdapter extends RecyclerView.Adapter<customerRequest
                                             db.collection("CustomerHistory").document(uniqueID).set(driverHistory);
                                             db.collection("DriverHistory").document(uniqueID).set(driverHistory);
                                             db.collection("OnRide").document(userID).set(driverOnRide);
+
+                                            db.collection("customerRequest").document(uniqueID).collection("customerRequestdroplocations").whereEqualTo("cid", cRequests.get(position).getCID()).get()
+                                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                            if (task.isSuccessful()) {
+                                                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                                                    Log.d(TAG, document.getId() + " => " + document.getData());
+                                                                    String DropLocationID= document.getId();
+                                                                    db.collection("customerRequest").document(uniqueID).collection("customerRequestdroplocations").document(DropLocationID).delete()
+                                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                                @Override
+                                                                                public void onSuccess(Void aVoid) {
+                                                                                    Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                                                                                    Log.d(TAG, "DocumentSnapshot successfully deleted!");
+
+                                                                                }
+
+                                                                            })
+                                                                            .addOnFailureListener(new OnFailureListener() {
+                                                                                @Override
+                                                                                public void onFailure(@NonNull Exception e) {
+                                                                                    Log.w(TAG, "Error deleting document", e);
+                                                                                }
+                                                                            });
+
+                                                                }
+                                                            } else {
+                                                                Log.d(TAG, "Error getting documents: ", task.getException());
+                                                            }
+                                                        }
+                                                    });
                                             db.collection("customerRequest").document(uniqueID).delete()
                                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                         @Override

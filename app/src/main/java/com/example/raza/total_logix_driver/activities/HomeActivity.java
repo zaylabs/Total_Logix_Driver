@@ -667,6 +667,7 @@ public class HomeActivity extends BaseActivity
         super.onDestroy();
         stopLocationUpdates();
         disconnectDriver();
+        customerrequestlistner.remove();
         CurrentCashDasboardListner.remove();
 
         mAuth.removeAuthStateListener(firebaseAuthListener);
